@@ -1,32 +1,98 @@
 import React, { Component } from 'react'
-import { createControl } from '../form/formFramework'
+import { createControl, validate, validateForm } from '../form/formFramework'
+import Input from '../components/UI/Input'
+import Button from '../components/UI/Button'
 
 
-function createOptionControl(number) {
+function createTextInputControl(label) {
   return createControl({
-    label: `Вариант ${number}`,
-    id: number,
-    errorMessage: 'Значение не может быть пустым'
+    label: label,
+    labelClass: "sr-only",
+    errorMessage: "Поле не может быть пустым"
   }, {required: true});
 };
 
 function createFormControls() {
   return {
-    question: createControl({
-      label: 'Введите вопрос',
-      errorMessage: 'Вопрос не может быть пустым'
-    }, {required: true}),
-    option1: createOptionControl(1),
-    option2: createOptionControl(2),
-    option3: createOptionControl(3),
-    option4: createOptionControl(4)
+    author: createTextInputControl("Автор"),
+    name: createTextInputControl("Название"),
+    year: createTextInputControl("Год издания"),
+    place: createTextInputControl("Месторасположение"),
+    image: createControl({
+      label: "Фотография обложки",
+      type: "file",
+      errorMessage: "Загрузите фотографию обложки"
+    }, {required: true})
   };
 };
 
 class CreateBook extends Component {
 
   state = {
+    isFormValid: false,
+    formControls: createFormControls()
+  }
 
+  onSubmitHandler = event => {
+    event.preventDefault()
+  }
+
+  addBookHandler = event => {
+    event.preventDefault()
+
+    const {author, name, year, place, image} = this.state.formControls;
+
+    const book = {
+      author: author.value,
+      name: name.value,
+      year: year.value,
+      place: place.value,
+      image: image.value
+    }
+
+    // this.props.createBook(book)
+
+    this.setState({
+      isFormValid: false,
+      formControls: createFormControls()
+    });
+  }
+
+  changeHandler = (controlValue, controlName) => {
+    const formControls = { ...this.state.formControls };
+    const control = { ...formControls[controlName] };
+
+    control.touched = true;
+    control.value = controlValue;
+    control.valid = validate(control.value, control.validation);
+
+    formControls[controlName] = control;
+
+    this.setState({
+      formControls,
+      isFormValid: validateForm(formControls)
+    });
+  }
+
+  renderControls() {
+    return Object.keys(this.state.formControls).map((controlName, index) => {
+      const control = this.state.formControls[controlName]
+
+      return (
+          <Input
+            key={controlName + index}
+            label={control.label}
+            labelClass={control.labelClass}
+            value={control.value}
+            type={control.type}
+            valid={control.valid}
+            shouldValidate={!!control.validation}
+            touched={control.touched}
+            errorMessage={control.errorMessage}
+            onChange={event => this.changeHandler(event.target.value, controlName)}
+          />
+      );
+    });
   }
 
   render() {
@@ -39,27 +105,16 @@ class CreateBook extends Component {
           <div className="col-sm-12 col-md-10 col-lg-5">
             <div className="shadow-sm bg-white rounded p-5">
               <form>
-                <div className="form-group mb-4">
-                  <label htmlFor="bookAuthor" class="sr-only">Автор книги</label>
-                  <input type="text" className="form-control form-control-lg" id="bookAuthor" placeholder="Автор книги" />
-                </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="bookName" class="sr-only">Название</label>
-                  <input type="text" className="form-control form-control-lg" id="bookName" placeholder="Название" />
-                </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="bookYear" class="sr-only">Год выпуска книги</label>
-                  <input type="text" className="form-control form-control-lg" id="bookYear" placeholder="Год выпуска книги" />
-                </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="author" class="sr-only">Местоположение</label>
-                  <input type="text" className="form-control form-control-lg" id="author" placeholder="Местоположение" />
-                </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="bookFace" class="">Фотография обложки</label>
-                  <input type="file" className="form-control-file" id="bookFace" />
-                </div>
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+
+                { this.renderControls() }
+
+                <Button
+                  onClick={this.addBookHandler}
+                  disabled={true}
+                  className="btn btn-primary btn-lg btn-block"
+                >
+                  Сохранить
+                </Button>
               </form>
             </div>
           </div>
