@@ -1,9 +1,10 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
-import {Navbar} from './components/Navbar'
-import {Home} from './pages/Home'
+import { Navbar } from './components/Navbar'
+import { Home } from './pages/Home'
 import CreateBook from './pages/CreateBook'
-import {BookDetail} from './pages/BookDetail'
+import { BookDetail } from './pages/BookDetail'
+import { ManageBooks } from './pages/ManageBooks'
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
         <div className="container-fluid pt-5">
           <Switch>
             <Route path="/create" component={CreateBook} />
+            <Route path="/update" component={CreateBook} />
+            <Route path="/manage" component={ManageBooks} />
             <Route path="/books/:id" component={BookDetail} />
             <Route path="/" exact component={Home} />
           </Switch>

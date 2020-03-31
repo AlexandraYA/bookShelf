@@ -111,7 +111,7 @@ class CreateBook extends Component {
                 <Button
                   onClick={this.addBookHandler}
                   disabled={true}
-                  className="btn btn-primary btn-lg btn-block"
+                  className="btn btn-success btn-lg btn-block"
                 >
                   Сохранить
                 </Button>
