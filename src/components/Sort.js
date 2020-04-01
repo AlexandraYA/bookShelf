@@ -4,8 +4,8 @@ import React from 'react'
 export const Sort = props => (
   <form>
     <div className="input-group mb-3">
-      <select className="custom-select">
-        <option value="1" selected>по автору А-Я</option>
+      <select className="custom-select" defaultValue="1">
+        <option value="1">по автору А-Я</option>
         <option value="2">по автору Я-А</option>
         <option value="3">по названию А-Я</option>
         <option value="4">по названию Я-А</option>

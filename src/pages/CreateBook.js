@@ -106,7 +106,7 @@ class CreateBook extends Component {
         <div className="row justify-content-center">
           <div className="col-sm-12 col-md-10 col-lg-5">
             <div className="shadow-sm bg-white rounded p-5">
-              <form>
+              <form onSubmit={this.onSubmitHandler}>
 
                 { this.renderControls() }
 

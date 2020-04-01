@@ -51,7 +51,7 @@ class ManageBooks extends Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.books
+    books: state.books.booksShow
   }
 }
 

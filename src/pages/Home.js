@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Card } from '../components/Card'
-import { Search } from '../components/Search'
+import Search from '../components/Search'
 import { Filter } from '../components/Filter'
 import { Sort } from '../components/Sort'
+import { fetchBooks } from '../store/actions/books'
 import belka from '../belka.jpg'
 
 
 class Home extends Component {
+
+  componentDidMount() {
+    this.props.fetchBooks();
+  }
 
   render() {
     return (
@@ -49,8 +54,14 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.books
+    books: state.books.booksShow
   }
 }
 
-export default connect(mapStateToProps)(Home);
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchBooks: () => dispatch(fetchBooks())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

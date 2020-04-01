@@ -1,19 +1,64 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import Button from './UI/Button'
+import { search } from '../store/actions/books'
 
 
-export const Search = props => (
-    <form>
-      <div className="input-group mb-3">
-        <div className="input-group-prepend">
-          <select className="custom-select">
-            <option value="1" selected>по автору</option>
-            <option value="2">по названию книги</option>
-          </select>
+class Search extends Component {
+
+  state = {
+    field: 'author',
+    value: ''
+  }
+
+  onSubmitHandler = event => {
+    event.preventDefault()
+  }
+
+  startSearching = (event) => {
+    event.preventDefault()
+    this.props.search(this.state.field, this.state.value);
+  }
+
+  render () {
+    return (
+      <form onSubmit={this.onSubmitHandler}>
+        <div className="input-group mb-3">
+          <div className="input-group-prepend">
+            <select
+              className="custom-select" 
+              defaultValue="author"
+              onChange={event => this.setState({field: event.target.value})}
+            >
+              <option value="author">по автору</option>
+              <option value="name">по названию книги</option>
+            </select>
+          </div>
+          <input
+          type="text" 
+          className="form-control"
+          onChange={event => this.setState({value: event.target.value})}
+          value={this.state.vlalue}
+          placeholder="Введите слово..." />
+          <div className="input-group-append">
+            <Button
+              className="btn btn-outline-info"
+              disabled={false}
+              onClick={this.startSearching}
+            >
+              Найти
+            </Button>
+          </div>
         </div>
-        <input type="text" className="form-control" placeholder="Введите слово..." />
-        <div className="input-group-append">
-          <button type="submit" className="btn btn-outline-info">Найти</button>
-        </div>
-      </div>
-    </form>
-)
+      </form>
+    )
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    search: (field, value) => dispatch(search(field, value))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Search)
