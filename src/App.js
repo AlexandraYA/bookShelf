@@ -1,10 +1,10 @@
 import React from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import { Navbar } from './components/Navbar'
-import { Home } from './pages/Home'
+import Home from './pages/Home'
 import CreateBook from './pages/CreateBook'
 import { BookDetail } from './pages/BookDetail'
-import { ManageBooks } from './pages/ManageBooks'
+import ManageBooks from './pages/ManageBooks'
 
 function App() {
   return (

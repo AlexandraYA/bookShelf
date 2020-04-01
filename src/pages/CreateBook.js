@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
+import { addBookToLibrary } from '../store/actions/books'
 
 
 function createTextInputControl(label) {
@@ -50,7 +52,7 @@ class CreateBook extends Component {
       image: image.value
     }
 
-    // this.props.createBook(book)
+    this.props.createBook(book)
 
     this.setState({
       isFormValid: false,
@@ -110,7 +112,7 @@ class CreateBook extends Component {
 
                 <Button
                   onClick={this.addBookHandler}
-                  disabled={true}
+                  disabled={!this.state.isFormValid}
                   className="btn btn-success btn-lg btn-block"
                 >
                   Сохранить
@@ -124,5 +126,11 @@ class CreateBook extends Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    createBook: newBook => dispatch(addBookToLibrary(newBook))
+  }
+}
 
-export default CreateBook
+
+export default connect(null, mapDispatchToProps)(CreateBook)

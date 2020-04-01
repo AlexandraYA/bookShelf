@@ -1,63 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 
-export const ManageBooks = () => {
+class ManageBooks extends Component {
 
-  const books = [
-    {
-      id: 1,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 2,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 3,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 4,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 5,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 6,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 7,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 8,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 9,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    },
-    {
-      id: 10,
-      author: "Пушкин А.С.",
-      name: "Дубровский"
-    }
-  ];
-
-  const renderRows = () => {
-    return books.map(book => {
+  renderRows() {
+    return this.props.books.map(book => {
       return (
         <tr>
           <th scope="row">{book.id}</th>
@@ -74,28 +22,37 @@ export const ManageBooks = () => {
     })
   }
 
+  render() {
+    return (
+      <div>
+        <h1>Управление Библиотекой</h1>
+        <div className="row justify-content-center mb-4">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Автор</th>
+              <th scope="col">Название</th>
+              <th scope="col"> </th>
+              <th scope="col"> </th>
+            </tr>
+          </thead>
+          <tbody>
 
-  return (
-    <div>
-      <h1>Управление Библиотекой</h1>
-      <div className="row justify-content-center mb-4">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Автор</th>
-            <th scope="col">Название</th>
-            <th scope="col"> </th>
-            <th scope="col"> </th>
-          </tr>
-        </thead>
-        <tbody>
+            { this.renderRows() }
 
-          { renderRows() }
-
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
+
+function mapStateToProps(state) {
+  return {
+    books: state.books.books
+  }
+}
+
+export default connect(mapStateToProps)(ManageBooks)
