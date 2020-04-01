@@ -2,7 +2,7 @@ import React from 'react'
 
 
 export const Sort = props => (
-  <from>
+  <form>
     <div className="input-group mb-3">
       <select className="custom-select">
         <option value="1" selected>по автору А-Я</option>
@@ -16,5 +16,5 @@ export const Sort = props => (
         <button type="submit" className="btn btn-outline-success">Отсортировать</button>
       </div>
     </div>
-  </from>
+  </form>
 )

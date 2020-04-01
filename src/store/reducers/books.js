@@ -1,4 +1,4 @@
-import { CREATE_BOOK } from '../actions/actionTypes'
+import { CREATE_BOOK, GET_BOOK_BY_ID } from '../actions/actionTypes'
 
 
 const initialState = {
@@ -72,11 +72,19 @@ const initialState = {
 
 export default function booksReducer(state = initialState, action) {
 
-  switch(action.type) {
+  console.log("state = ", state);
+  console.log("action = ", action);
+
+  switch (action.type) {
     case CREATE_BOOK:
       return {
         ...state,
         books: [...state.books, {...action.newBook, id: state.books.length + 1}]
+      }
+    case GET_BOOK_BY_ID:
+      return {
+        ...state,
+        book: state.books.find(book => book.id === action.bookId)
       }
     default:
       return state

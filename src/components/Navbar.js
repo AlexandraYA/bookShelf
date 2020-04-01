@@ -15,7 +15,7 @@ export const Navbar = () => (
         <NavLink to="/create" className="nav-link">Добавить книгу</NavLink>
       </li>
       <li className="nav-item">
-        <NavLink to="/manage" className="nav-link">Управление</NavLink>
+        <NavLink to="/books" className="nav-link">Управление</NavLink>
       </li>
     </ul>
   </nav>

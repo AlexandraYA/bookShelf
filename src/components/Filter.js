@@ -2,7 +2,7 @@ import React from 'react'
 
 
 export const Filter = props => (
-  <from>
+  <form>
     <div className="input-group mb-3">
       <select className="custom-select">
         <option value="1" selected>полка 1 справа</option>
@@ -14,5 +14,5 @@ export const Filter = props => (
         <button type="submit" className="btn btn-outline-secondary">Отфильтровать</button>
       </div>
     </div>
-  </from>
+  </form>
 )

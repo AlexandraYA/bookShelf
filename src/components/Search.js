@@ -2,7 +2,7 @@ import React from 'react'
 
 
 export const Search = props => (
-    <from>
+    <form>
       <div className="input-group mb-3">
         <div className="input-group-prepend">
           <select className="custom-select">
@@ -15,5 +15,5 @@ export const Search = props => (
           <button type="submit" className="btn btn-outline-info">Найти</button>
         </div>
       </div>
-    </from>
+    </form>
 )

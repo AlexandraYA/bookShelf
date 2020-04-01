@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 
 export const Card = props => (
@@ -6,10 +7,11 @@ export const Card = props => (
     <div className="row no-gutters">
       <div className="col-md-8">
         <div className="card-body">
-          <h5 className="card-title">{props.name}</h5>
-          <p className="card-text">{props.author}</p>
-          <p className="card-text"><small className="text-muted">Год издания книги: {props.year}</small></p>
-          <p className="card-text">Местоположение книги: {props.place}</p>
+          <h5 className="card-title">{props.book.name}</h5>
+          <p className="card-text">{props.book.author}</p>
+          <p className="card-text"><small className="text-muted">Год издания книги: {props.book.year}</small></p>
+          <p className="card-text">Местоположение книги: {props.book.place}</p>
+          <Link to={"/books/" + props.book.id} >Подробнее</Link>
         </div>
       </div>
       <div className="col-md-4">

@@ -29,14 +29,13 @@ class Home extends Component {
           </div>
         </div>
         <div className="row">
-          { this.props.books.map(book => {
+          { this.props.books.map((book, index) => {
             return (
-              <div className="col-sm-4">
+              <div
+                key={book.id + index}
+                className="col-sm-4">
                 <Card
-                  name={book.name}
-                  author={book.author}
-                  year={book.year}
-                  place={book.place}
+                  book={book}
                   image={belka}
                 />
               </div>
