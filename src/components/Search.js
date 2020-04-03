@@ -11,10 +11,6 @@ class Search extends Component {
     value: ''
   }
 
-  onSubmitHandler = event => {
-    event.preventDefault()
-  }
-
   startSearching = (event) => {
     event.preventDefault()
     this.props.search(this.state.field, this.state.value);

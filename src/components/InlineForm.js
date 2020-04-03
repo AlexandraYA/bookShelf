@@ -42,7 +42,7 @@ const InlineForm = props => {
           : renderSelect()
         }
 
-        { props.input.onChange
+        { props.input
           ? <input
             type="text"
             className="form-control"

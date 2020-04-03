@@ -1,4 +1,4 @@
-import { CREATE_BOOK, GET_BOOK_BY_ID, SEARCH_BOOK, FETCH_BOOKS } from '../actions/actionTypes'
+import { CREATE_BOOK, GET_BOOK_BY_ID, MODIFY_BOOKS_LIST, FETCH_BOOKS } from '../actions/actionTypes'
 
 
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
       id: 1,
       author: "Пудин А.С.",
       name: "Воришка храбрый",
-      year: "1834",
+      year: "1844",
       place: "шкаф справа полка левая верхняя",
       image: "../belka.jpg"
     },
@@ -23,7 +23,7 @@ const initialState = {
       id: 3,
       author: "Николаев А.С.",
       name: "Дон Кихот",
-      year: "1834",
+      year: "1934",
       place: "шкаф справа полка левая верхняя",
       image: "../belka.jpg"
     },
@@ -39,7 +39,7 @@ const initialState = {
       id: 5,
       author: "Бурунов А.С.",
       name: "Василий Иваныч",
-      year: "1834",
+      year: "1804",
       place: "шкаф справа полка левая верхняя",
       image: "../belka.jpg"
     },
@@ -47,7 +47,7 @@ const initialState = {
       id: 6,
       author: "Алимов А.С.",
       name: "Космос",
-      year: "1834",
+      year: "1734",
       place: "шкаф справа полка левая верхняя",
       image: "../belka.jpg"
     },
@@ -55,7 +55,7 @@ const initialState = {
       id: 7,
       author: "Рогозин А.С.",
       name: "Косматый мишка",
-      year: "1834",
+      year: "1994",
       place: "шкаф справа полка левая верхняя",
       image: "../belka.jpg"
     }
@@ -89,10 +89,10 @@ export default function booksReducer(state = initialState, action) {
         ...state,
         book: state.books.find(book => book.id === action.bookId)
       }
-    case SEARCH_BOOK:
+    case MODIFY_BOOKS_LIST:
       return {
         ...state,
-        booksShow: [...action.findedBooks]
+        booksShow: [...action.books]
       }
     default:
       return state

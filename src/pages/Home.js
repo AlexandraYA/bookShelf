@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Card } from '../components/Card'
 import Search from '../components/Search'
 import { Filter } from '../components/Filter'
-import { Sort } from '../components/Sort'
+import Sort from '../components/Sort'
 import { fetchBooks } from '../store/actions/books'
 import belka from '../belka.jpg'
 
@@ -37,7 +37,7 @@ class Home extends Component {
           { this.props.books.map((book, index) => {
             return (
               <div
-                key={book.id + index}
+                key={`${book.id}-${Math.random()}`}
                 className="col-sm-4">
                 <Card
                   book={book}

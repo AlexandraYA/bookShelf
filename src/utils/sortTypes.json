@@ -1,0 +1,34 @@
+{
+  "sortTypes": {
+    "authorAZ": {
+      "text": "по автору А-Я",
+      "field": "author",
+      "up": true
+    },
+    "authorZA": {
+      "text": "по автору Я-А",
+      "field": "author",
+      "up": false
+    },
+    "nameAZ": {
+      "text": "по названию А-Я",
+      "field": "name",
+      "up": true
+    },
+    "nameZA": {
+      "text": "по названию Я-А",
+      "field": "name",
+      "up": false
+    },
+    "yearDown": {
+      "text": "по году по убыванию",
+      "field": "year",
+      "up": false
+    },
+    "yearUp": {
+      "text": "по году по возрастанию",
+      "field": "year",
+      "up": true
+    }
+  }
+}
