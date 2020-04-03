@@ -36,6 +36,19 @@ export function search(field, value) {
   }
 }
 
+export function filter(place) {
+  return (dispatch, getState) => {
+    let state = getState().books
+    let books = state.books.filter(book => {
+      if (book.place === place) {
+        return book
+      }
+    })
+
+    dispatch(showModifiedBooksList(books))
+  }
+}
+
 export function sort(type) {
   return (dispatch, getState) => {
     let state = getState().books

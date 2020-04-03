@@ -17,7 +17,6 @@ class Sort extends Component {
 
   render() {
     return (
-
       <InlineForm
         wrappedSelect={false}
         btn={{

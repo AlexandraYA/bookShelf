@@ -8,7 +8,7 @@ const initialState = {
       author: "Пудин А.С.",
       name: "Воришка храбрый",
       year: "1844",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка 1 справа",
       image: "../belka.jpg"
     },
     {
@@ -16,7 +16,7 @@ const initialState = {
       author: "Пушкин А.С.",
       name: "Дубровский",
       year: "1834",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка 2 справа",
       image: "../belka.jpg"
     },
     {
@@ -24,7 +24,7 @@ const initialState = {
       author: "Николаев А.С.",
       name: "Дон Кихот",
       year: "1934",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка 1 справа",
       image: "../belka.jpg"
     },
     {
@@ -32,7 +32,7 @@ const initialState = {
       author: "Федоров А.С.",
       name: "Фекла Большая",
       year: "1834",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка на в шкафу у окна",
       image: "../belka.jpg"
     },
     {
@@ -40,7 +40,7 @@ const initialState = {
       author: "Бурунов А.С.",
       name: "Василий Иваныч",
       year: "1804",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка внизу справа",
       image: "../belka.jpg"
     },
     {
@@ -48,7 +48,7 @@ const initialState = {
       author: "Алимов А.С.",
       name: "Космос",
       year: "1734",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка 2 справа",
       image: "../belka.jpg"
     },
     {
@@ -56,7 +56,7 @@ const initialState = {
       author: "Рогозин А.С.",
       name: "Косматый мишка",
       year: "1994",
-      place: "шкаф справа полка левая верхняя",
+      place: "полка 1 справа",
       image: "../belka.jpg"
     }
   ],
