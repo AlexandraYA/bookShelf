@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Layout from '../components/Layout'
 import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
@@ -99,29 +100,31 @@ class CreateBook extends Component {
 
   render() {
     return (
-      <div>
-        <div className="mb-5">
-          <h1 className="text-center">Добавить книгу</h1>
-        </div>
-        <div className="row justify-content-center">
-          <div className="col-sm-12 col-md-10 col-lg-5">
-            <div className="shadow-sm bg-white rounded p-5">
-              <form onSubmit={this.onSubmitHandler}>
+      <Layout withHeader={true}>
+        <div>
+          <div className="mb-5">
+            <h1 className="text-center">Добавить книгу</h1>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-sm-12 col-md-10 col-lg-5">
+              <div className="shadow-sm bg-white rounded p-5">
+                <form onSubmit={this.onSubmitHandler}>
 
-                { this.renderControls() }
+                  { this.renderControls() }
 
-                <Button
-                  onClick={this.addBookHandler}
-                  disabled={!this.state.isFormValid}
-                  className="btn btn-success btn-lg btn-block"
-                >
-                  Сохранить
-                </Button>
-              </form>
+                  <Button
+                    onClick={this.addBookHandler}
+                    disabled={!this.state.isFormValid}
+                    className="btn btn-success btn-lg btn-block"
+                  >
+                    Сохранить
+                  </Button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Layout>
     )
   }
 }

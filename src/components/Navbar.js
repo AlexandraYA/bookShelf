@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { IconSignOut } from './UI/IconSignOut'
 
 
 export const Navbar = () => (
@@ -16,6 +17,13 @@ export const Navbar = () => (
       </li>
       <li className="nav-item">
         <NavLink to="/books" className="nav-link">Управление</NavLink>
+      </li>
+    </ul>
+    <ul className="navbar-nav ml-md-auto">
+      <li>
+        <NavLink to="/auth" className="nav-link">
+          <IconSignOut />
+        </NavLink>
       </li>
     </ul>
   </nav>

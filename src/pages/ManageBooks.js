@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Layout from '../components/Layout'
 
 
 class ManageBooks extends Component {
@@ -24,27 +25,29 @@ class ManageBooks extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Управление Библиотекой</h1>
-        <div className="row justify-content-center mb-4">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Автор</th>
-              <th scope="col">Название</th>
-              <th scope="col"> </th>
-              <th scope="col"> </th>
-            </tr>
-          </thead>
-          <tbody>
+      <Layout withHeader={true}>
+        <div>
+          <h1>Управление Библиотекой</h1>
+          <div className="row justify-content-center mb-4">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Автор</th>
+                  <th scope="col">Название</th>
+                  <th scope="col"> </th>
+                  <th scope="col"> </th>
+                </tr>
+              </thead>
+              <tbody>
 
-            { this.renderRows() }
+                { this.renderRows() }
 
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </Layout>
     )
   }
 }
