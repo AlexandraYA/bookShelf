@@ -9,7 +9,6 @@ import Loader from '../components/UI/Loader/Loader'
 class BookDetail extends Component {
 
   componentDidMount() {
-    console.log("this.props.match.params.id = ", this.props.match.params.id);
     this.props.getBookById(this.props.match.params.id)
   }
 

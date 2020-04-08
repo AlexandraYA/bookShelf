@@ -1,4 +1,12 @@
-import { CREATE_BOOK, GET_BOOK_BY_ID, MODIFY_BOOKS_LIST, FETCH_BOOKS } from '../actions/actionTypes'
+import {
+  CREATE_BOOK,
+  GET_BOOK_BY_ID,
+  MODIFY_BOOKS_LIST,
+  FETCH_BOOKS,
+  TO_PAGE_EDIT_BOOK,
+  EDIT_BOOK,
+  DELETE_BOOK
+} from '../actions/actionTypes'
 
 
 const initialState = {
@@ -61,7 +69,22 @@ const initialState = {
     }
   ],
   booksShow: [],
-  book: null,
+  book: {
+    id: null,
+    author: '',
+    name: '',
+    year: '',
+    place: '',
+    image: ''
+  },
+  initialBook: {
+    id: null,
+    author: '',
+    name: '',
+    year: '',
+    place: '',
+    image: ''
+  },
   filterType: '',
   filterValue: '',
   sortType: '',
@@ -93,6 +116,24 @@ export default function booksReducer(state = initialState, action) {
       return {
         ...state,
         booksShow: [...action.books]
+      }
+    case DELETE_BOOK:
+      return {
+        ...state,
+        books: state.books.filter(book => book.id !== action.bookId),
+        booksShow: state.booksShow.filter(book => book.id !== action.bookId)
+      }
+    case TO_PAGE_EDIT_BOOK:
+      return {
+        ...state,
+        book: state.books.find(book => book.id === action.bookId)
+      }
+    case EDIT_BOOK:
+      return {
+        ...state,
+        book: { ...state.initialBook },
+        books: action.editedBooks,
+        booksShow: action.editedBooks
       }
     default:
       return state

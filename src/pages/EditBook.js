@@ -4,23 +4,38 @@ import Layout from '../components/Layout'
 import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
-import { addBookToLibrary } from '../store/actions/books'
+import { saveBook } from '../store/actions/books'
 
 
-function createTextInputControl(label) {
+function createTextInputControl(label, value) {
   return createControl({
+    value: value,
     label: label,
+    valid: true,
     labelClass: "sr-only",
     errorMessage: "Поле не может быть пустым"
   }, {required: true});
 };
 
-function createFormControls() {
+function createFormControls(initialBook) {
+
+  let author = '';
+  let name = '';
+  let year = '';
+  let place = '';
+
+  if (initialBook) {
+    author = initialBook.author;
+    name = initialBook.name;
+    year = initialBook.year;
+    place = initialBook.place;
+  }
+
   return {
-    author: createTextInputControl("Автор"),
-    name: createTextInputControl("Название"),
-    year: createTextInputControl("Год издания"),
-    place: createTextInputControl("Месторасположение"),
+    author: createTextInputControl("Автор", author),
+    name: createTextInputControl("Название", name),
+    year: createTextInputControl("Год издания", year),
+    place: createTextInputControl("Месторасположение", place),
     image: createControl({
       label: "Фотография обложки",
       type: "file",
@@ -29,15 +44,21 @@ function createFormControls() {
   };
 };
 
-class CreateBook extends Component {
+class EditBook extends Component {
 
   state = {
-    isFormValid: false,
+    isFormValid: true,
     formControls: createFormControls()
   }
 
   onSubmitHandler = event => {
     event.preventDefault()
+  }
+
+  componentDidMount() {
+    this.setState({
+      formControls: createFormControls(this.props.book)
+    })
   }
 
   addBookHandler = event => {
@@ -46,14 +67,15 @@ class CreateBook extends Component {
     const {author, name, year, place, image} = this.state.formControls;
 
     const book = {
+      id: this.props.book.id,
       author: author.value,
       name: name.value,
       year: year.value,
       place: place.value,
-      image: image.value
+      image: image.value ? image.value : this.props.book.value
     }
 
-    this.props.createBook(book)
+    this.props.editBookHandler(book)
 
     this.setState({
       isFormValid: false,
@@ -103,7 +125,7 @@ class CreateBook extends Component {
       <Layout withHeader={true}>
         <div>
           <div className="mb-4">
-            <h2 className="text-center">Добавить книгу</h2>
+            <h2 className="text-center">Редактировать книгу</h2>
           </div>
           <div className="row justify-content-center">
             <div className="col-sm-12 col-md-10 col-lg-5">
@@ -129,11 +151,17 @@ class CreateBook extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    book: state.books.book
+  }
+}
+
 function mapDispatchToProps(dispatch) {
   return {
-    createBook: newBook => dispatch(addBookToLibrary(newBook))
+    editBookHandler: book => dispatch(saveBook(book))
   }
 }
 
 
-export default connect(null, mapDispatchToProps)(CreateBook)
+export default connect(mapStateToProps, mapDispatchToProps)(EditBook)
