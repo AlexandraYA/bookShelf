@@ -19,6 +19,10 @@ export function validate(value, validation = null) {
     isValid = value.trim() !== '' && isValid;
   }
 
+  if (validation.minLength) {
+    isValid = value.length >= validation.minLength && isValid;
+  }
+
   return isValid;
 }
 

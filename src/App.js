@@ -5,6 +5,7 @@ import CreateBook from './pages/CreateBook'
 import EditBook from './pages/EditBook'
 import BookDetail from './pages/BookDetail'
 import ManageBooks from './pages/ManageBooks'
+import ManagePlaces from './pages/ManagePlaces'
 import Auth from './pages/Auth'
 
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/edit" component={EditBook} />
         <Route path="/books/:id" component={BookDetail} />
         <Route path="/books" exact component={ManageBooks} />
+        <Route path="/places" exact component={ManagePlaces} />
         <Route path="/" exact component={Home} />
       </Switch>
     </BrowserRouter>

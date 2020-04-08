@@ -9,3 +9,6 @@ export const DELETE_BOOK = 'DELETE_BOOK'
 
 export const SHOW_ALERT = 'SHOW_ALERT'
 export const HIDE_ALERT = 'HIDE_ALERT'
+
+export const CREATE_PLACE = 'CREATE_PLACE'
+export const DELETE_PLACE = 'DELETE_PLACE'

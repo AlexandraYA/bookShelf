@@ -18,6 +18,9 @@ export const Navbar = () => (
       <li className="nav-item">
         <NavLink to="/books" className="nav-link">Управление</NavLink>
       </li>
+      <li className="nav-item">
+        <NavLink to="/places" className="nav-link">Полки</NavLink>
+      </li>
     </ul>
     <ul className="navbar-nav ml-md-auto">
       <li>
