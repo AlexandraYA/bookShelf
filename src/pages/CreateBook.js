@@ -5,6 +5,7 @@ import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import { addBookToLibrary } from '../store/actions/books'
+import { Alert } from '../components/Alert'
 
 
 function createTextInputControl(label) {
@@ -53,7 +54,7 @@ class CreateBook extends Component {
       image: image.value
     }
 
-    this.props.createBook(book)
+    this.props.createBook(book, this.props.history)
 
     this.setState({
       isFormValid: false,
@@ -101,6 +102,7 @@ class CreateBook extends Component {
   render() {
     return (
       <Layout withHeader={true}>
+        { this.props.showAlert ? <Alert text={"Книга успешно создана."} className="success" /> : null }
         <div>
           <div className="mb-4">
             <h2 className="text-center">Добавить книгу</h2>
@@ -129,11 +131,16 @@ class CreateBook extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
   return {
-    createBook: newBook => dispatch(addBookToLibrary(newBook))
+    showAlert: state.app.showAlert
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    createBook: (newBook, history) => dispatch(addBookToLibrary(newBook, history))
+  }
+}
 
-export default connect(null, mapDispatchToProps)(CreateBook)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBook)

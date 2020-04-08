@@ -105,7 +105,8 @@ export default function booksReducer(state = initialState, action) {
     case CREATE_BOOK:
       return {
         ...state,
-        books: [...state.books, {...action.newBook, id: state.books.length + 1}]
+        books: [...action.books],
+        booksShow: [...action.books]
       }
     case GET_BOOK_BY_ID:
       return {
@@ -132,8 +133,8 @@ export default function booksReducer(state = initialState, action) {
       return {
         ...state,
         book: { ...state.initialBook },
-        books: action.editedBooks,
-        booksShow: action.editedBooks
+        books: [...action.editedBooks],
+        booksShow: [...action.editedBooks]
       }
     default:
       return state

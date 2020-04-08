@@ -7,7 +7,7 @@ import {
   EDIT_BOOK,
   DELETE_BOOK
 } from './actionTypes'
-
+import { showAlert, hideAlert } from './app'
 import sortTypes from '../../utils/sortTypes.json'
 
 
@@ -36,16 +36,34 @@ export function deleteBook(bookId) {
   }
 }
 
-export function addBookToLibrary(newBook) {
-  return {
-    type: CREATE_BOOK,
-    newBook
+export function addBookToLibrary(newBook, history) {
+  return (dispatch, getState) => {
+
+    const state = getState().books
+    let newBookId = state.books.length + 1
+    let books = [...state.books, { ...newBook, id: newBookId }]
+
+    dispatch({
+      type: CREATE_BOOK,
+      books
+    })
+
+    dispatch(showAlert())
+
+    let setTimeoutId = setTimeout(() => {
+
+      dispatch(hideAlert())
+      history.push('/books/' + newBookId)
+
+      clearTimeout(setTimeoutId)
+    }, 3000)
   }
 }
 
-export function saveBook(editedBook) {
+export function saveBook(editedBook, history) {
   return (dispatch, getState) => {
     const state = getState().books
+
     let editedBooks = state.books.map(book => {
       if (book.id === editedBook.id) {
         return editedBook
@@ -54,10 +72,20 @@ export function saveBook(editedBook) {
       }
     })
 
-    return dispatch({
+    dispatch({
       type: EDIT_BOOK,
       editedBooks
     })
+
+    dispatch(showAlert())
+
+    let setTimeoutId = setTimeout(() => {
+
+      dispatch(hideAlert())
+      history.push('/books/' + editedBook.id)
+
+      clearTimeout(setTimeoutId)
+    }, 3000)
   }
 }
 

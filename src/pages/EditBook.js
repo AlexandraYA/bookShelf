@@ -5,6 +5,7 @@ import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import { saveBook } from '../store/actions/books'
+import { Alert } from '../components/Alert'
 
 
 function createTextInputControl(label, value) {
@@ -75,7 +76,7 @@ class EditBook extends Component {
       image: image.value ? image.value : this.props.book.value
     }
 
-    this.props.editBookHandler(book)
+    this.props.editBookHandler(book, this.props.history)
 
     this.setState({
       isFormValid: false,
@@ -123,6 +124,7 @@ class EditBook extends Component {
   render() {
     return (
       <Layout withHeader={true}>
+        { this.props.showAlert ? <Alert text={"Книга успешно изменена."} className="success" /> : null }
         <div>
           <div className="mb-4">
             <h2 className="text-center">Редактировать книгу</h2>
@@ -153,15 +155,15 @@ class EditBook extends Component {
 
 function mapStateToProps(state) {
   return {
-    book: state.books.book
+    book: state.books.book,
+    showAlert: state.app.showAlert
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    editBookHandler: book => dispatch(saveBook(book))
+    editBookHandler: (book, history) => dispatch(saveBook(book, history))
   }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditBook)
