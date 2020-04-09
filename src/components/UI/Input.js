@@ -36,7 +36,7 @@ const Input = props => {
 
       {
         isInvalid(props)
-          ? <span>{props.errorMessage || 'Введите верно значение'}</span>
+          ? <span className="text-danger">{props.errorMessage || 'Введите верно значение'}</span>
           : null
       }
 

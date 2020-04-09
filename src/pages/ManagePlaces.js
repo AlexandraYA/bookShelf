@@ -6,6 +6,7 @@ import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import { Alert } from '../components/Alert'
 import { createPlace, deletePlace } from '../store/actions/places'
+import { showModal } from '../store/actions/app'
 
 
 class ManagePlaces extends Component {
@@ -14,10 +15,10 @@ class ManagePlaces extends Component {
     newPlace: createControl({
       label: "Название месторасположения книг",
       labelClass: "sr-only",
-      errorMessage: "Поле не может быть пустым"
+      errorMessage: "Минимальная длина 3 символа"
     }, {required: true, minLength: 3}),
     isFormValid: false,
-    regim: 'create',
+    regim: "create",
     alert: {
       create: {
         text: "Месторасположение успешно создано.",
@@ -27,6 +28,12 @@ class ManagePlaces extends Component {
         text: "Месторасположение успешно удалено.",
         class: "danger"
       }
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.placeToDeleteId && this.props.modalAnswer) {
+      this.deletePlaceHandler()
     }
   }
 
@@ -46,11 +53,22 @@ class ManagePlaces extends Component {
     })
   }
 
-  deletePlaceHandler = (placeId) => {
-    this.props.deletePlace(placeId)
-
+  deletePlaceHandler = () => {
+    this.props.deletePlace(this.state.placeToDeleteId)
     this.setState({
-      regim: 'delete'
+      regim: 'delete',
+      placeToDeleteId: null
+    })
+  }
+
+  openDeleteModal = (placeId) => {
+    this.props.showModal({
+      title: 'Удаление месторасположения',
+      text: 'Вы уверены?',
+      actionBtn: 'Удалить'
+    })
+    this.setState({
+      placeToDeleteId: placeId
     })
   }
 
@@ -60,8 +78,8 @@ class ManagePlaces extends Component {
       this.props.createPlace(this.state.newPlace)
 
       this.setState({
-        regim: 'create',
-        newPlace: {...this.state.newPlace, value: '', valid: false, touched: false},
+        regim: "create",
+        newPlace: {...this.state.newPlace, value: "", valid: false, touched: false},
         isFormValid: false
       })
     }
@@ -82,7 +100,7 @@ class ManagePlaces extends Component {
                   <li key={place.id} className="list-group-item d-flex justify-content-between">
                     <span>{place.name}</span>
                     <Button
-                      onClick={() => this.deletePlaceHandler(place.id)}
+                      onClick={() => this.openDeleteModal(place.id)}
                       disabled={false}
                       className="btn btn-danger btn-sm"
                     >
@@ -124,14 +142,16 @@ class ManagePlaces extends Component {
 function mapStateToProps(state) {
   return {
     places: state.places.places,
-    showAlert: state.app.showAlert
+    showAlert: state.app.showAlert,
+    modalAnswer: state.app.modalAnswer
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     createPlace: place => dispatch(createPlace(place)),
-    deletePlace: placeId => dispatch(deletePlace(placeId))
+    deletePlace: placeId => dispatch(deletePlace(placeId)),
+    showModal: obj => dispatch(showModal(obj)),
   }
 }
 

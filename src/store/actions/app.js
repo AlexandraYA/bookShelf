@@ -1,4 +1,4 @@
-import { SHOW_ALERT, HIDE_ALERT } from './actionTypes'
+import { SHOW_ALERT, HIDE_ALERT, SHOW_MODAL, HIDE_MODAL } from './actionTypes'
 
 
 export function showAlert() {
@@ -10,5 +10,19 @@ export function showAlert() {
 export function hideAlert() {
   return {
     type: HIDE_ALERT
+  }
+}
+
+export function showModal(data) {
+  return {
+    type: SHOW_MODAL,
+    data
+  }
+}
+
+export function hideModal(answer) {
+  return {
+    type: HIDE_MODAL,
+    answer
   }
 }
