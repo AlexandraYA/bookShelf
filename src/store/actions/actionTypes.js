@@ -15,3 +15,4 @@ export const HIDE_MODAL = 'HIDE_MODAL'
 
 export const CREATE_PLACE = 'CREATE_PLACE'
 export const DELETE_PLACE = 'DELETE_PLACE'
+export const SAVE_PLACE_ID = 'SAVE_PLACE_ID'

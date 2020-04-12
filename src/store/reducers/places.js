@@ -1,4 +1,4 @@
-import { CREATE_PLACE, DELETE_PLACE } from '../actions/actionTypes'
+import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_ID } from '../actions/actionTypes'
 
 const initialState = {
   places: [
@@ -18,7 +18,8 @@ const initialState = {
       id: 4,
       name: "полка внизу справа"
     }
-  ]
+  ],
+  placeToDeleteId: null
 }
 
 export default function placesReducer (state = initialState, action) {
@@ -26,11 +27,18 @@ export default function placesReducer (state = initialState, action) {
   switch (action.type) {
     case CREATE_PLACE:
       return {
+        ...state,
         places: action.places
       }
     case DELETE_PLACE:
       return {
+        ...state,
         places: action.places
+      }
+    case SAVE_PLACE_ID:
+      return {
+        ...state,
+        placeToDeleteId: action.placeId
       }
     default:
       return state

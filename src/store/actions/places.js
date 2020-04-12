@@ -1,5 +1,5 @@
-import { CREATE_PLACE, DELETE_PLACE } from './actionTypes'
-import { showAlert, hideAlert } from './app'
+import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_ID } from './actionTypes'
+import { showAlert, hideAlert, showModal } from './app'
 
 
 export function createPlace(place) {
@@ -20,10 +20,37 @@ export function createPlace(place) {
   }
 }
 
-export function deletePlace(placeId) {
+export function beforeDeletePlace(placeId) {
+  return (dispatch, getState) => {
+    const stateBooks = getState().books.books
+    const statePlaces = getState().places.places
+
+    const place = statePlaces.find(place => place.id === placeId)
+    const books = stateBooks.filter(book => book.place === place.name)
+
+    if (books.length) {
+      dispatch(showModal({
+        text: 'Нельзя удалить месторасположение, у которого есть книги.'
+      }))
+    } else {
+      dispatch({
+        type: SAVE_PLACE_ID,
+        placeId
+      })
+      dispatch(showModal({
+        title: 'Удаление месторасположения ' + place.name,
+        text: 'Вы уверены?',
+        actionBtn: 'Удалить',
+        closeBtn: 'Отмена'
+      }))
+    }
+  }
+}
+
+export function deletePlace() {
   return (dispatch, getState) => {
     const state = getState().places
-    let places = state.places.filter(place => place.id !== placeId)
+    let places = state.places.filter(place => place.id !== state.placeToDeleteId)
 
     dispatch({
       type: DELETE_PLACE,

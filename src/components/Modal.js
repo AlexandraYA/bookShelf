@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { hideModal } from '../../store/actions/app'
+import { hideModal, doAction } from '../store/actions/app'
 
 
 const Modal = props => {
@@ -34,16 +34,16 @@ const Modal = props => {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => props.close(false)}
+                onClick={props.close}
               >
                 { props.closeBtn }
               </button>
 
-              { props.actionBtn.length 
+              { props.actionBtn.length
                 ? <button
-                  type="button" 
+                  type="button"
                   className="btn btn-primary"
-                  onClick={() => props.close(true)}
+                  onClick={props.success}
                 >
                   { props.actionBtn }
                 </button>
@@ -69,7 +69,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    close: answer => dispatch(hideModal(answer))
+    close: () => dispatch(hideModal()),
+    success: () => dispatch(doAction())
   }
 }
 

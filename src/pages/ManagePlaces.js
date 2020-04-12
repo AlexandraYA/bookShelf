@@ -5,8 +5,7 @@ import { createControl, validate } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import { Alert } from '../components/Alert'
-import { createPlace, deletePlace } from '../store/actions/places'
-import { showModal } from '../store/actions/app'
+import { createPlace, deletePlace, beforeDeletePlace } from '../store/actions/places'
 
 
 class ManagePlaces extends Component {
@@ -28,12 +27,6 @@ class ManagePlaces extends Component {
         text: "Месторасположение успешно удалено.",
         class: "danger"
       }
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.state.placeToDeleteId && this.props.modalAnswer) {
-      this.deletePlaceHandler()
     }
   }
 
@@ -62,11 +55,9 @@ class ManagePlaces extends Component {
   }
 
   openDeleteModal = (placeId) => {
-    this.props.showModal({
-      title: 'Удаление месторасположения',
-      text: 'Вы уверены?',
-      actionBtn: 'Удалить'
-    })
+
+    this.props.beforeDeletePlace(placeId)
+
     this.setState({
       placeToDeleteId: placeId
     })
@@ -142,8 +133,7 @@ class ManagePlaces extends Component {
 function mapStateToProps(state) {
   return {
     places: state.places.places,
-    showAlert: state.app.showAlert,
-    modalAnswer: state.app.modalAnswer
+    showAlert: state.app.showAlert
   }
 }
 
@@ -151,7 +141,7 @@ function mapDispatchToProps(dispatch) {
   return {
     createPlace: place => dispatch(createPlace(place)),
     deletePlace: placeId => dispatch(deletePlace(placeId)),
-    showModal: obj => dispatch(showModal(obj)),
+    beforeDeletePlace: placeId => dispatch(beforeDeletePlace(placeId))
   }
 }
 

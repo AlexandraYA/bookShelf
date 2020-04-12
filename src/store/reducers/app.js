@@ -6,9 +6,10 @@ const initialState = {
   showModal: false,
   modalText: '',
   modalTitle: '',
-  modalCloseBtn: 'Отмена',
+  modalCloseBtn: 'Закрыть',
   modalActionBtn: '',
-  modalAnswer: null
+  modalAction: null,
+  typeModal: 'deletePlace'
 }
 
 export default function appReducer(state = initialState, action) {
@@ -30,8 +31,9 @@ export default function appReducer(state = initialState, action) {
         showModal: true,
         modalText: action.data.text || '',
         modalTitle: action.data.title || '',
-        modalActionBtn: action.data.actionBtn || 'Удалить',
-        modalAnswer: null
+        modalActionBtn: action.data.actionBtn || '',
+        modalCloseBtn: action.data.closeBtn || 'Закрыть',
+        typeModal: action.data.typeModal || 'deletePlace'
       }
     case HIDE_MODAL:
       return {
@@ -39,9 +41,8 @@ export default function appReducer(state = initialState, action) {
         showModal: false,
         modalText: '',
         modalTitle: '',
-        modalCloseBtn: 'Отмена',
-        modalActionBtn: 'Удалить',
-        modalAnswer: action.answer
+        modalCloseBtn: 'Закрыть',
+        modalActionBtn: ''
       }
     default:
       return state
