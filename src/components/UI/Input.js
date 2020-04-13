@@ -14,7 +14,7 @@ const Input = props => {
   const htmlFor = `${inputType}-${Math.random()}`;
 
   if (isInvalid(props)) {
-    cls.push('');
+    cls.push('border border-danger');
   }
 
   return (

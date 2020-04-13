@@ -7,7 +7,20 @@ import InlineForm from './InlineForm'
 class Filter extends Component {
 
   state = {
-    place: 'полка 1 справа'
+    place: null,
+    places: []
+  }
+
+  componentDidMount() {
+
+    const places = this.props.places.map(place => {
+      return {text: place.name, value: place.name}
+    })
+
+    this.setState({
+      place: places[0].value,
+      places: places
+    })
   }
 
   startFiltering = (event) => {
@@ -27,27 +40,16 @@ class Filter extends Component {
         }}
         select={{
           onChange: event => this.setState({place: event.target.value}),
-          options: [
-            {
-              text: "полка 1 справа",
-              value: "полка 1 справа"
-            },
-            {
-              text: "полка 2 справа",
-              value: "полка 2 справа"
-            },
-            {
-              text: "полка на в шкафу у окна",
-              value: "полка на в шкафу у окна"
-            },
-            {
-              text: "полка внизу справа",
-              value: "полка внизу справа"
-            }
-          ]
+          options: this.state.places
         }}
       />
     )
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    places: state.places.places
   }
 }
 
@@ -57,4 +59,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Filter)
+export default connect(mapStateToProps, mapDispatchToProps)(Filter)

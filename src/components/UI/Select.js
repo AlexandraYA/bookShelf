@@ -1,20 +1,21 @@
-import React from 'react';
+import React from 'react'
 
 
 const Select = props => {
-  const htmlFor = `${props.label}-${Math.random()}`;
+  const htmlFor = `${props.label}-${Math.random()}`
+  const labelClass = props.isLabel ? '' : 'sr-only'
 
   return (
-    <div className={props.divClass}>
+    <div className='form-group mb-4'>
 
       { props.isLabel
-        ? <label htmlFor={htmlFor}>{props.label}</label>
+        ? <label class={labelClass} htmlFor={htmlFor}>{props.label}</label>
         : null
       }
 
       <select
         id={htmlFor}
-        className={props.selectClass}
+        className='form-control'
         value={props.value}
         onChange={props.onChange}
       >
@@ -31,7 +32,7 @@ const Select = props => {
         }
       </select>
     </div>
-  );
-};
+  )
+}
 
-export default Select;
+export default Select

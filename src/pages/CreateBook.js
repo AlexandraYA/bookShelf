@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Layout from '../components/Layout'
 import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
+import Select from '../components/UI/Select'
 import Button from '../components/UI/Button'
 import { addBookToLibrary } from '../store/actions/books'
 import { Alert } from '../components/Alert'
@@ -21,7 +22,6 @@ function createFormControls() {
     author: createTextInputControl("Автор"),
     name: createTextInputControl("Название"),
     year: createTextInputControl("Год издания"),
-    place: createTextInputControl("Месторасположение"),
     image: createControl({
       label: "Фотография обложки",
       type: "file",
@@ -34,7 +34,14 @@ class CreateBook extends Component {
 
   state = {
     isFormValid: false,
-    formControls: createFormControls()
+    formControls: createFormControls(),
+    placeName: ''
+  }
+
+  componentDidMount() {
+    this.setState({
+      placeName: this.props.places.length ? this.props.places[0].name : ''
+    })
   }
 
   onSubmitHandler = event => {
@@ -44,13 +51,13 @@ class CreateBook extends Component {
   addBookHandler = event => {
     event.preventDefault()
 
-    const {author, name, year, place, image} = this.state.formControls;
+    const {author, name, year, image} = this.state.formControls;
 
     const book = {
       author: author.value,
       name: name.value,
       year: year.value,
-      place: place.value,
+      place: this.state.placeName,
       image: image.value
     }
 
@@ -58,7 +65,8 @@ class CreateBook extends Component {
 
     this.setState({
       isFormValid: false,
-      formControls: createFormControls()
+      formControls: createFormControls(),
+      placeName: this.props.places[0].name
     });
   }
 
@@ -76,6 +84,12 @@ class CreateBook extends Component {
       formControls,
       isFormValid: validateForm(formControls)
     });
+  }
+
+  selectChangeHandler = (value) => {
+    this.setState({
+      placeName: value
+    })
   }
 
   renderControls() {
@@ -100,6 +114,18 @@ class CreateBook extends Component {
   }
 
   render() {
+    const select = <Select
+          label="Месторасположение"
+          value={this.state.placeName}
+          onChange={event => this.selectChangeHandler(event.target.value)}
+          options={this.props.places.map(place => {
+                    return {
+                      text: place.name,
+                      value: place.name
+                    }
+                  })}
+        />
+
     return (
       <Layout withHeader={true}>
         { this.props.showAlert ? <Alert text={"Книга успешно создана."} className="success" /> : null }
@@ -113,6 +139,8 @@ class CreateBook extends Component {
                 <form onSubmit={this.onSubmitHandler}>
 
                   { this.renderControls() }
+
+                  { select }
 
                   <Button
                     onClick={this.addBookHandler}
@@ -133,7 +161,8 @@ class CreateBook extends Component {
 
 function mapStateToProps(state) {
   return {
-    showAlert: state.app.showAlert
+    showAlert: state.app.showAlert,
+    places: state.places.places
   }
 }
 

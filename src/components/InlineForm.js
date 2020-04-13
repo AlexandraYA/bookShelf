@@ -1,4 +1,5 @@
 import React from 'react'
+import Loader from './UI/Loader/Loader'
 
 
 const InlineForm = props => {
@@ -28,6 +29,12 @@ const InlineForm = props => {
       })}
     </select>
   )
+
+  if (!props.select.options.length) {
+    return (
+      <Loader />
+    )
+  }
 
   return (
     <form onSubmit={onSubmitHandler}>

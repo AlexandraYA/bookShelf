@@ -4,6 +4,7 @@ import Layout from '../components/Layout'
 import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
+import Select from '../components/UI/Select'
 import { saveBook } from '../store/actions/books'
 import { Alert } from '../components/Alert'
 
@@ -23,20 +24,17 @@ function createFormControls(initialBook) {
   let author = '';
   let name = '';
   let year = '';
-  let place = '';
 
   if (initialBook) {
     author = initialBook.author;
     name = initialBook.name;
     year = initialBook.year;
-    place = initialBook.place;
   }
 
   return {
     author: createTextInputControl("Автор", author),
     name: createTextInputControl("Название", name),
     year: createTextInputControl("Год издания", year),
-    place: createTextInputControl("Месторасположение", place),
     image: createControl({
       label: "Фотография обложки",
       type: "file",
@@ -49,30 +47,32 @@ class EditBook extends Component {
 
   state = {
     isFormValid: true,
-    formControls: createFormControls()
+    formControls: createFormControls(),
+    placeName: ''
+  }
+
+  componentDidMount() {
+    this.setState({
+      formControls: createFormControls(this.props.book),
+      placeName: this.props.book.place
+    })
   }
 
   onSubmitHandler = event => {
     event.preventDefault()
   }
 
-  componentDidMount() {
-    this.setState({
-      formControls: createFormControls(this.props.book)
-    })
-  }
-
   addBookHandler = event => {
     event.preventDefault()
 
-    const {author, name, year, place, image} = this.state.formControls;
+    const {author, name, year, image} = this.state.formControls;
 
     const book = {
       id: this.props.book.id,
       author: author.value,
       name: name.value,
       year: year.value,
-      place: place.value,
+      place: this.state.placeName,
       image: image.value ? image.value : this.props.book.value
     }
 
@@ -80,7 +80,8 @@ class EditBook extends Component {
 
     this.setState({
       isFormValid: false,
-      formControls: createFormControls()
+      formControls: createFormControls(),
+      placeName: this.props.places[0].name
     });
   }
 
@@ -98,6 +99,12 @@ class EditBook extends Component {
       formControls,
       isFormValid: validateForm(formControls)
     });
+  }
+
+  selectChangeHandler = (value) => {
+    this.setState({
+      placeName: value
+    })
   }
 
   renderControls() {
@@ -122,6 +129,18 @@ class EditBook extends Component {
   }
 
   render() {
+    const select = <Select
+          label="Месторасположение"
+          value={this.state.placeName}
+          onChange={event => this.selectChangeHandler(event.target.value)}
+          options={this.props.places.map(place => {
+                    return {
+                      text: place.name,
+                      value: place.name
+                    }
+                  })}
+          />
+
     return (
       <Layout withHeader={true}>
         { this.props.showAlert ? <Alert text={"Книга успешно изменена."} className="success" /> : null }
@@ -135,6 +154,8 @@ class EditBook extends Component {
                 <form onSubmit={this.onSubmitHandler}>
 
                   { this.renderControls() }
+
+                  { select }
 
                   <Button
                     onClick={this.addBookHandler}
@@ -156,7 +177,8 @@ class EditBook extends Component {
 function mapStateToProps(state) {
   return {
     book: state.books.book,
-    showAlert: state.app.showAlert
+    showAlert: state.app.showAlert,
+    places: state.places.places
   }
 }
 
