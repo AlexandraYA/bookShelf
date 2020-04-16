@@ -1,5 +1,16 @@
-import { SHOW_ALERT, HIDE_ALERT, SHOW_MODAL, HIDE_MODAL } from './actionTypes'
+import {
+  SHOW_ALERT,
+  HIDE_ALERT,
+  SHOW_MODAL,
+  HIDE_MODAL,
+  RESET_FILTER_SETTINGS,
+  SAVE_SORT_VALUE,
+  SAVE_FILTER_VALUE,
+  SAVE_SEARCH_VALUE,
+  SAVE_SEARCH_FIELD_VALUE
+} from './actionTypes'
 import { deletePlace } from './places'
+import { fetchBooks } from './books'
 
 
 export function showAlert() {
@@ -34,5 +45,40 @@ export function doAction() {
 export function hideModal() {
   return {
     type: HIDE_MODAL
+  }
+}
+
+export function resetFilterSettings() {
+  return dispatch => {
+    dispatch(fetchBooks())
+    dispatch({type: RESET_FILTER_SETTINGS})
+  }
+}
+
+export function saveSortValue(value) {
+  return {
+    type: SAVE_SORT_VALUE,
+    value
+  }
+}
+
+export function saveFilterValue(value) {
+  return {
+    type: SAVE_FILTER_VALUE,
+    value
+  }
+}
+
+export function saveSearchValue(value) {
+  return {
+    type: SAVE_SEARCH_VALUE,
+    value
+  }
+}
+
+export function saveSearchFieldValue(value) {
+  return {
+    type: SAVE_SEARCH_FIELD_VALUE,
+    value
   }
 }

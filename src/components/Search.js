@@ -2,18 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import InlineForm from './InlineForm'
 import { search } from '../store/actions/books'
+import { saveSearchValue, saveSearchFieldValue } from '../store/actions/app'
 
 
 class Search extends Component {
 
-  state = {
-    field: 'author',
-    value: ''
-  }
-
   startSearching = (event) => {
     event.preventDefault()
-    this.props.search(this.state.field, this.state.value);
+    this.props.search();
   }
 
   render () {
@@ -28,7 +24,8 @@ class Search extends Component {
           onClick: this.startSearching
         }}
         select={{
-          onChange: event => this.setState({field: event.target.value}),
+          defaultValue: this.props.field,
+          onChange: event => this.props.changeSearchFieldValue(event.target.value),
           options: [{
             text: "по автору",
             value: "author"
@@ -38,8 +35,8 @@ class Search extends Component {
           }]
         }}
         input={{
-          onChange: event => this.setState({value: event.target.value}),
-          value: this.state.value,
+          onChange: event => this.props.changeSearchValue(event.target.value),
+          value: this.props.value,
           placeholder: "Введите слово..."
         }}
       />
@@ -47,10 +44,19 @@ class Search extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
   return {
-    search: (field, value) => dispatch(search(field, value))
+    field: state.app.filterSettings.searchField,
+    value: state.app.filterSettings.search
   }
 }
 
-export default connect(null, mapDispatchToProps)(Search)
+function mapDispatchToProps(dispatch) {
+  return {
+    search: () => dispatch(search()),
+    changeSearchValue: value => dispatch(saveSearchValue(value)),
+    changeSearchFieldValue: value => dispatch(saveSearchFieldValue(value))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

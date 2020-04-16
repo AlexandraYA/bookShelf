@@ -15,7 +15,7 @@ const InlineForm = props => {
   const renderSelect = () => (
     <select
       className="custom-select"
-      defaultValue={props.select.options[0].value}
+      value={props.select.defaultValue}
       onChange={props.select.onChange}
     >
       { props.select.options.map((option, index) => {

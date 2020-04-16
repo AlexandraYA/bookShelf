@@ -96,10 +96,12 @@ export function getBookById(bookId) {
   }
 }
 
-export function search(field, value) {
+export function search() {
   return (dispatch, getState) => {
-    let state = getState().books
-    let books = state.books.filter(book => {
+    const state = getState()
+    const field = state.app.filterSettings.searchField
+    const value = state.app.filterSettings.search
+    let books = state.books.books.filter(book => {
       if (book[field].toLowerCase().includes(value.toLowerCase())) {
         return book
       }
@@ -109,10 +111,11 @@ export function search(field, value) {
   }
 }
 
-export function filter(place) {
+export function filter() {
   return (dispatch, getState) => {
-    let state = getState().books
-    let books = state.books.filter(book => {
+    const state = getState()
+    const place = state.app.filterSettings.filter
+    let books = state.books.books.filter(book => {
       if (book.place === place) {
         return book
       }
@@ -122,13 +125,14 @@ export function filter(place) {
   }
 }
 
-export function sort(type) {
+export function sort() {
   return (dispatch, getState) => {
-    let state = getState().books
-    let field = sortTypes.sortTypes[type].field
-    let up = sortTypes.sortTypes[type].up
+    const state = getState()
+    const sortType = state.app.filterSettings.sortType
+    let field = sortTypes.sortTypes[sortType].field
+    let up = sortTypes.sortTypes[sortType].up
 
-    let books = state.booksShow.sort(function (a, b) {
+    let books = state.books.booksShow.sort(function (a, b) {
       if (a[field] > b[field]) {
         return up ? 1 : -1
       }

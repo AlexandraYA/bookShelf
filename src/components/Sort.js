@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { sort } from '../store/actions/books'
+import { saveSortValue } from '../store/actions/app'
 import InlineForm from './InlineForm'
 
 
 class Sort extends Component {
 
-  state = {
-    type: 'authorAZ'
-  }
-
   startSorting = (event) => {
     event.preventDefault()
-    this.props.sort(this.state.type);
+    this.props.sort();
   }
 
   render() {
@@ -26,42 +23,27 @@ class Sort extends Component {
           onClick: this.startSorting
         }}
         select={{
-          onChange: event => this.setState({type: event.target.value}),
-          options: [{
-              text: "по автору А-Я",
-              value: "authorAZ"
-            },
-            {
-              text: "по автору Я-А",
-              value: "authorZA"
-            },
-            {
-              text: "по названию А-Я",
-              value: "nameAZ"
-            },
-            {
-              text: "по названию Я-А",
-              value: "nameZA"
-            },
-            {
-              text: "по году по убыванию",
-              value: "yearDown"
-            },
-            {
-              text: "по году по возрастанию",
-              value: "yearUp"
-            }
-          ]
+          defaultValue: this.props.sortType,
+          onChange: event => this.props.changeSortValue(event.target.value),
+          options: this.props.sortTypes
         }}
       />
     )
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
   return {
-    sort: type => dispatch(sort(type))
+    sortTypes: state.app.sortTypes,
+    sortType: state.app.filterSettings.sortType
   }
 }
 
-export default connect(null, mapDispatchToProps)(Sort)
+function mapDispatchToProps(dispatch) {
+  return {
+    sort: () => dispatch(sort()),
+    changeSortValue: value => dispatch(saveSortValue(value))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sort)
