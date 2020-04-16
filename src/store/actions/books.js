@@ -7,13 +7,16 @@ import {
   EDIT_BOOK,
   DELETE_BOOK
 } from './actionTypes'
-import { showAlert, hideAlert } from './app'
+import { showAlert, hideAlert, saveSortValue } from './app'
 import sortTypes from '../../utils/sortTypes.json'
 
 
 export function fetchBooks() {
-  return {
-    type: FETCH_BOOKS
+  return dispatch => {
+    dispatch({
+      type: FETCH_BOOKS
+    })
+    dispatch(sort())
   }
 }
 
@@ -122,6 +125,13 @@ export function filter() {
     })
 
     return dispatch(showModifiedBooksList(books))
+  }
+}
+
+export function setSortTypeAndSort(sortType) {
+  return dispatch => {
+    dispatch(saveSortValue(sortType))
+    dispatch(sort())
   }
 }
 
