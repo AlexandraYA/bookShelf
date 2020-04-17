@@ -5,7 +5,7 @@ import { IconCaretDown } from '../components/UI/IconCaretDown'
 import { IconPencil } from '../components/UI/IconPencil'
 import { IconTrash } from '../components/UI/IconTrash'
 import Layout from '../components/Layout'
-import { fetchBooks, toPageEditBook, deleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
+import { fetchBooks, toPageEditBook, beforeDeleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
 
 
@@ -226,7 +226,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchBooks: () => dispatch(fetchBooks()),
     editBookHandle: (bookId, history) => dispatch(toPageEditBook(bookId, history)),
-    deleteBookHandle: bookId => dispatch(deleteBook(bookId)),
+    deleteBookHandle: bookId => dispatch(beforeDeleteBook(bookId)),
     setSortTypeAndSort: sortType => dispatch(setSortTypeAndSort(sortType)),
     changeFilterValue: value => dispatch(saveFilterValue(value)),
     filter: () => dispatch(filter()),

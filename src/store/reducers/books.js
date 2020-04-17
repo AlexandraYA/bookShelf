@@ -5,7 +5,8 @@ import {
   FETCH_BOOKS,
   TO_PAGE_EDIT_BOOK,
   EDIT_BOOK,
-  DELETE_BOOK
+  DELETE_BOOK,
+  SAVE_BOOK_ID
 } from '../actions/actionTypes'
 
 
@@ -90,7 +91,8 @@ const initialState = {
   sortType: '',
   sortValue: '',
   searchField: '',
-  searchValue: ''
+  searchValue: '',
+  bookToDelete: null
 }
 
 
@@ -118,11 +120,17 @@ export default function booksReducer(state = initialState, action) {
         ...state,
         booksShow: [...action.books]
       }
+    case SAVE_BOOK_ID:
+      return {
+        ...state,
+        bookToDelete: action.bookId
+      }
     case DELETE_BOOK:
       return {
         ...state,
-        books: state.books.filter(book => book.id !== action.bookId),
-        booksShow: state.booksShow.filter(book => book.id !== action.bookId)
+        books: state.books.filter(book => book.id !== state.bookToDelete),
+        booksShow: state.booksShow.filter(book => book.id !== state.bookToDelete),
+        bookToDelete: null
       }
     case TO_PAGE_EDIT_BOOK:
       return {

@@ -5,9 +5,10 @@ import {
   FETCH_BOOKS,
   TO_PAGE_EDIT_BOOK,
   EDIT_BOOK,
-  DELETE_BOOK
+  DELETE_BOOK,
+  SAVE_BOOK_ID
 } from './actionTypes'
-import { showAlert, hideAlert, saveSortValue } from './app'
+import { showAlert, hideAlert, showModal, saveSortValue } from './app'
 import sortTypes from '../../utils/sortTypes.json'
 
 
@@ -29,10 +30,28 @@ export function toPageEditBook(bookId, history) {
   }
 }
 
-export function deleteBook(bookId) {
+export function beforeDeleteBook(bookId) {
+  return (dispatch, getState) => {
+    const stateBooks = getState().books.books
+    const book = stateBooks.find(book => book.id === bookId)
+
+    dispatch({
+      type: SAVE_BOOK_ID,
+      bookId
+    })
+    dispatch(showModal({
+      title: 'Удаление книги ' + book.name,
+      text: 'Вы уверены?',
+      actionBtn: 'Удалить',
+      closeBtn: 'Отмена',
+      typeModal: 'deleteBook'
+    }))
+  }
+}
+
+export function deleteBook() {
   return {
-    type: DELETE_BOOK,
-    bookId
+    type: DELETE_BOOK
   }
 }
 

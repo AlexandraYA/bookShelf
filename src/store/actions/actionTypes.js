@@ -16,6 +16,7 @@ export const HIDE_MODAL = 'HIDE_MODAL'
 export const CREATE_PLACE = 'CREATE_PLACE'
 export const DELETE_PLACE = 'DELETE_PLACE'
 export const SAVE_PLACE_ID = 'SAVE_PLACE_ID'
+export const SAVE_BOOK_ID = 'SAVE_BOOK_ID'
 
 export const RESET_FILTER_SETTINGS = 'RESET_FILTER_SETTINGS'
 export const SAVE_SORT_VALUE = 'SAVE_SORT_VALUE'

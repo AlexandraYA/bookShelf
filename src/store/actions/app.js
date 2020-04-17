@@ -10,7 +10,7 @@ import {
   SAVE_SEARCH_FIELD_VALUE
 } from './actionTypes'
 import { deletePlace } from './places'
-import { fetchBooks } from './books'
+import { fetchBooks, deleteBook } from './books'
 
 
 export function showAlert() {
@@ -37,6 +37,8 @@ export function doAction() {
     const state = getState().app
     if (state.typeModal === 'deletePlace') {
       dispatch(deletePlace())
+    } else if (state.typeModal === 'deleteBook') {
+      dispatch(deleteBook())
     }
     dispatch(hideModal())
   }
