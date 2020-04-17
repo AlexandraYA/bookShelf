@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { IconCaretUp } from '../components/UI/IconCaretUp'
 import { IconCaretDown } from '../components/UI/IconCaretDown'
+import { IconPencil } from '../components/UI/IconPencil'
+import { IconTrash } from '../components/UI/IconTrash'
 import Layout from '../components/Layout'
 import { fetchBooks, toPageEditBook, deleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
@@ -59,7 +61,7 @@ class ManageBooks extends Component {
               onClick={() => this.props.editBookHandle(book.id, this.props.history)}
               className="btn btn-success btn-sm"
             >
-              Ред.
+              <IconPencil />
             </button>
           </td>
           <td>
@@ -68,7 +70,7 @@ class ManageBooks extends Component {
               onClick={() => this.props.deleteBookHandle(book.id)}
               className="btn btn-danger btn-sm"
             >
-              Удалить
+              <IconTrash />
             </button>
           </td>
         </tr>
