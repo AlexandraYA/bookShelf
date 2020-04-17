@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { IconCaretUp } from '../components/UI/IconCaretUp'
 import { IconCaretDown } from '../components/UI/IconCaretDown'
 import Layout from '../components/Layout'
-import { fetchBooks, toPageEditBook, deleteBook, setSortTypeAndSort } from '../store/actions/books'
+import { fetchBooks, toPageEditBook, deleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
+import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
 
 
 class ManageBooks extends Component {
@@ -16,6 +17,10 @@ class ManageBooks extends Component {
 
   componentDidMount() {
     this.props.fetchBooks();
+  }
+
+  onSubmitHandler = event => {
+    event.preventDefault()
   }
 
   sortAuthor = (sortType) => {
@@ -52,7 +57,7 @@ class ManageBooks extends Component {
             <button
               type="button"
               onClick={() => this.props.editBookHandle(book.id, this.props.history)}
-              className="btn btn-light btn-sm"
+              className="btn btn-success btn-sm"
             >
               Ред.
             </button>
@@ -76,7 +81,55 @@ class ManageBooks extends Component {
       <Layout withHeader={true}>
         <div>
           <h1>Управление Библиотекой</h1>
-          <div className="row justify-content-center mb-4">
+          <div className="row mt-4">
+            <div className="col-auto">
+              <form className="form-inline" onSubmit={this.onSubmitHandler}>
+                <div>
+                  <select
+                  className="custom-select mr-sm-2" 
+                  onChange={event => this.props.changeFilterValue(event.target.value)}>
+                    {
+                      this.props.places.length
+                      ? this.props.places.map(place => (
+                        <option key={place.name + place.id} value={place.name}>{place.name}</option>
+                      ))
+                      : <option disabled>Нет полок</option>
+                    }
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  onClick={() => {this.props.filter()}}
+                  className="btn btn-outline-info"
+                >
+                  Отфильтровать
+                </button>
+              </form>
+            </div>
+            <div className="col-auto">
+              <form className="form-inline" onSubmit={this.onSubmitHandler}>
+                <div className="form-group mx-sm-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Что будем искать?"
+                    onChange={event => this.props.changeSearchValue(event.target.value)}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  onClick={event => {this.props.searchIntoAllFields(event.target.value)}}
+                  className="btn btn-outline-primary"
+                >
+                  Найти
+                </button>
+              </form>
+            </div>
+            <div className="col-auto">
+              <button type="submit" onClick={() => {this.props.reset()}} className="btn btn-outline-danger">Сбросить</button>
+            </div>
+          </div>
+          <div className="row justify-content-center mt-4">
             <table className="table">
               <thead>
                 <tr>
@@ -103,6 +156,7 @@ class ManageBooks extends Component {
                   </th>
                   <th scope="col">
                     {
+                      /*TODO do own button component for sort btn with icon caret  */
                       this.state.sortNameUp
                       ? <button
                           type="button"
@@ -161,7 +215,8 @@ class ManageBooks extends Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.booksShow
+    books: state.books.booksShow,
+    places: state.places.places
   }
 }
 
@@ -170,7 +225,12 @@ function mapDispatchToProps(dispatch) {
     fetchBooks: () => dispatch(fetchBooks()),
     editBookHandle: (bookId, history) => dispatch(toPageEditBook(bookId, history)),
     deleteBookHandle: bookId => dispatch(deleteBook(bookId)),
-    setSortTypeAndSort: sortType => dispatch(setSortTypeAndSort(sortType))
+    setSortTypeAndSort: sortType => dispatch(setSortTypeAndSort(sortType)),
+    changeFilterValue: value => dispatch(saveFilterValue(value)),
+    filter: () => dispatch(filter()),
+    changeSearchValue: value => dispatch(saveSearchValue(value)),
+    searchIntoAllFields: value => dispatch(searchIntoAllFields(value)),
+    reset: () => dispatch(resetFilterSettings())
   }
 }
 

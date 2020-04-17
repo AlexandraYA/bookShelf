@@ -12,11 +12,8 @@ import sortTypes from '../../utils/sortTypes.json'
 
 
 export function fetchBooks() {
-  return dispatch => {
-    dispatch({
-      type: FETCH_BOOKS
-    })
-    dispatch(sort())
+  return {
+    type: FETCH_BOOKS
   }
 }
 
@@ -96,6 +93,25 @@ export function getBookById(bookId) {
   return {
     type: GET_BOOK_BY_ID,
     bookId: parseInt(bookId)
+  }
+}
+
+export function searchIntoAllFields() {
+  return (dispatch, getState) => {
+    const state = getState()
+    const value = state.app.filterSettings.search
+    let resultsInAuthors = state.books.books.filter(book => {
+      if (book.author.toLowerCase().includes(value.toLowerCase())) {
+        return book
+      }
+    })
+    let resultsInNames = state.books.books.filter(book => {
+      if (book.name.toLowerCase().includes(value.toLowerCase())) {
+        return book
+      }
+    })
+
+    return dispatch(showModifiedBooksList(resultsInAuthors.concat(resultsInNames)))
   }
 }
 
