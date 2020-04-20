@@ -13,10 +13,6 @@ class Home extends Component {
     this.props.fetchBooks();
   }
 
-  resetFilters() {
-
-  }
-
   render() {
     return (
       <Layout withHeader={true}>

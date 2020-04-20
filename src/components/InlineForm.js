@@ -18,6 +18,7 @@ const InlineForm = props => {
       value={props.select.defaultValue}
       onChange={props.select.onChange}
     >
+      <option>{ props.selectLabel }</option>
       { props.select.options.map((option, index) => {
         return (
           <option

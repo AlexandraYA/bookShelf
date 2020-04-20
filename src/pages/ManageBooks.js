@@ -5,6 +5,7 @@ import { IconCaretDown } from '../components/UI/IconCaretDown'
 import { IconPencil } from '../components/UI/IconPencil'
 import { IconTrash } from '../components/UI/IconTrash'
 import Layout from '../components/Layout'
+import Pagination from '../components/Pagination'
 import { fetchBooks, toPageEditBook, beforeDeleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
 
@@ -59,12 +60,10 @@ class ManageBooks extends Component {
             <button
               type="button"
               onClick={() => this.props.editBookHandle(book.id, this.props.history)}
-              className="btn btn-success btn-sm"
+              className="btn btn-success btn-sm mr-1"
             >
               <IconPencil />
             </button>
-          </td>
-          <td>
             <button
               type="button"
               onClick={() => this.props.deleteBookHandle(book.id)}
@@ -90,6 +89,7 @@ class ManageBooks extends Component {
                   <select
                   className="custom-select mr-sm-2" 
                   onChange={event => this.props.changeFilterValue(event.target.value)}>
+                    <option>Выберите полку</option>
                     {
                       this.props.places.length
                       ? this.props.places.map(place => (
@@ -199,7 +199,6 @@ class ManageBooks extends Component {
                     Год
                   </th>
                   <th scope="col"> </th>
-                  <th scope="col"> </th>
                 </tr>
               </thead>
               <tbody>
@@ -209,6 +208,10 @@ class ManageBooks extends Component {
               </tbody>
             </table>
           </div>
+          <Pagination
+            currentPage={1}
+            allPages={1}
+          />
         </div>
       </Layout>
     )

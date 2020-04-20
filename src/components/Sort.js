@@ -23,6 +23,7 @@ class Sort extends Component {
           onClick: this.startSorting
         }}
         select={{
+          selectLabel: "Выберите тип сортировки",
           defaultValue: this.props.sortType,
           onChange: event => this.props.changeSortValue(event.target.value),
           options: this.props.sortTypes

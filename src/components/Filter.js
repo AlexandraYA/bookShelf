@@ -41,6 +41,7 @@ class Filter extends Component {
           onClick: this.startFiltering
         }}
         select={{
+          selectLabel: "Выберите полку",
           defaultValue: this.props.place,
           onChange: event => this.props.changeFilterValue(event.target.value),
           options: this.state.places

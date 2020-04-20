@@ -13,8 +13,8 @@ import {
 const defaultFilterSettings = {
   search: '',
   searchField: 'author',
-  sortType: 'authorAZ',
-  filter: 'полка 1 справа'
+  sortType: '',
+  filter: ''
 }
 
 const initialState = {
