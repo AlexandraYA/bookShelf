@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { IconSignOut } from './UI/IconSignOut'
+import { IconSignOut } from './UI/icons'
 
 
 export const Navbar = () => (

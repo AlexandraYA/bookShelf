@@ -5,6 +5,7 @@ import { createControl, validate } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import { Alert } from '../components/Alert'
+import { IconTrash } from '../components/UI/icons'
 import { createPlace, deletePlace, beforeDeletePlace } from '../store/actions/places'
 
 
@@ -95,7 +96,7 @@ class ManagePlaces extends Component {
                       disabled={false}
                       className="btn btn-danger btn-sm"
                     >
-                      Удалить
+                      <IconTrash />
                     </Button>
                   </li>
                 )) }
