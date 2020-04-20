@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { IconTrash, IconCaretUp, IconCaretDown, IconPencil } from '../components/UI/icons'
+import { IconTrash, IconPencil } from '../components/UI/icons'
+import { ButtonUp, ButtonDown } from '../components/UI/CaretButtons'
 import Layout from '../components/Layout'
 import Pagination from '../components/Pagination'
 import { fetchBooks, toPageEditBook, beforeDeleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
@@ -136,41 +137,16 @@ class ManageBooks extends Component {
                   <th scope="col">
                     {
                       this.state.sortAuthorUp
-                      ? <button
-                          type="button"
-                          onClick={() => this.sortAuthor("authorAZ")}
-                          className="btn btn-light btn-sm mr-1"
-                        >
-                          <IconCaretUp />
-                        </button>
-                      : <button
-                          type="button"
-                          onClick={() => this.sortAuthor("authorZA")}
-                          className="btn btn-light btn-sm mr-1"
-                        >
-                          <IconCaretDown />
-                        </button>
+                      ? <ButtonUp onClick={() => this.sortAuthor("authorAZ")} />
+                      : <ButtonDown onClick={() => this.sortAuthor("authorZA")} />
                     }
                     Автор
                   </th>
                   <th scope="col">
                     {
-                      /*TODO do own button component for sort btn with icon caret  */
                       this.state.sortNameUp
-                      ? <button
-                          type="button"
-                          onClick={() => this.sortName("nameAZ")}
-                          className="btn btn-light btn-sm mr-1"
-                        >
-                          <IconCaretUp />
-                        </button>
-                      : <button
-                          type="button"
-                          onClick={() => this.sortName("nameZA")}
-                          className="btn btn-light btn-sm mr-1"
-                        >
-                          <IconCaretDown />
-                        </button>
+                      ? <ButtonUp onClick={() => this.sortName("nameAZ")} />
+                      : <ButtonDown onClick={() => this.sortName("nameZA")} />
                     }
                     Название
                   </th>
@@ -178,20 +154,8 @@ class ManageBooks extends Component {
                   <th scope="col">
                     {
                       this.state.sortYearUp
-                      ? <button
-                          type="button"
-                          onClick={() => this.sortYear("yearDown")}
-                          className="btn btn-light btn-sm mr-1"
-                        >
-                          <IconCaretUp />
-                        </button>
-                      : <button
-                          type="button"
-                          onClick={() => this.sortYear("yearUp")}
-                          className="btn btn-light btn-sm mr-1"
-                        >
-                          <IconCaretDown />
-                        </button>
+                      ? <ButtonUp onClick={() => this.sortYear("yearDown")} />
+                      : <ButtonDown onClick={() => this.sortYear("yearUp")} />
                     }
                     Год
                   </th>
