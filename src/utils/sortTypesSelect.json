@@ -1,0 +1,26 @@
+[
+  {
+    "text": "по автору А-Я",
+    "value": "authorAZ"
+  },
+  {
+    "text": "по автору Я-А",
+    "value": "authorZA"
+  },
+  {
+    "text": "по названию А-Я",
+    "value": "nameAZ"
+  },
+  {
+    "text": "по названию Я-А",
+    "value": "nameZA"
+  },
+  {
+    "text": "по году по убыванию",
+    "value": "yearDown"
+  },
+  {
+    "text": "по году по возрастанию",
+    "value": "yearUp"
+  }
+]

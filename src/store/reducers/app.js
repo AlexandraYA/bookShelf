@@ -9,6 +9,7 @@ import {
   SAVE_SEARCH_VALUE,
   SAVE_SEARCH_FIELD_VALUE
 } from '../actions/actionTypes'
+import sortTypesSelect from '../../utils/sortTypesSelect.json'
 
 const defaultFilterSettings = {
   search: '',
@@ -26,32 +27,7 @@ const initialState = {
   modalActionBtn: '',
   modalAction: null,
   typeModal: 'deletePlace',
-  sortTypes: [
-    {
-      text: "по автору А-Я",
-      value: "authorAZ"
-    },
-    {
-      text: "по автору Я-А",
-      value: "authorZA"
-    },
-    {
-      text: "по названию А-Я",
-      value: "nameAZ"
-    },
-    {
-      text: "по названию Я-А",
-      value: "nameZA"
-    },
-    {
-      text: "по году по убыванию",
-      value: "yearDown"
-    },
-    {
-      text: "по году по возрастанию",
-      value: "yearUp"
-    }
-  ],
+  sortTypes: sortTypesSelect,
   filterSettings: defaultFilterSettings
 }
 
