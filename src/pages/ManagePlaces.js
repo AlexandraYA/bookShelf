@@ -84,7 +84,7 @@ class ManagePlaces extends Component {
       <Layout withHeader={true}>
         { this.props.showAlert ? <Alert text={alert[regim].text} className={alert[regim].class} /> : null }
         <div>
-          <h2>Управление месторасположениями</h2>
+          <h1 className="mb-5">Управление месторасположениями</h1>
           <div className="row justify-content-center mb-4">
             <div className="col-6">
               <ul className="list-group">

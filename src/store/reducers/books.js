@@ -38,7 +38,7 @@ const initialState = {
   bookToDelete: null,
   count: 0,
   currentPage: 1,
-  booksPerPage: 3,
+  booksPerPage: 10,
   allPages: 0
 }
 

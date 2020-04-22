@@ -143,7 +143,7 @@ export function searchIntoAllFields() {
 
 function doSearch(field, value, books) {
   return books.filter(book => {
-    if (book[field].toLowerCase().includes(value.toLowerCase())) {
+    if (book[field].rus.toLowerCase().includes(value.toLowerCase())) {
       return book
     }
   })
@@ -200,16 +200,29 @@ function doSort(sortType, books) {
   let field = sortTypes.sortTypes[sortType].field
   let up = sortTypes.sortTypes[sortType].up
 
-  return books.sort(function (a, b) {
-    if (a[field] > b[field]) {
-      return up ? 1 : -1
-    }
-    if (a[field] < b[field]) {
-      return up ? -1 : 1
-    }
-    // a должно быть равным b
-    return 0;
-  })
+  if (field === 'year') {
+    return books.sort(function (a, b) {
+      if (a[field] > b[field]) {
+        return up ? 1 : -1
+      }
+      if (a[field] < b[field]) {
+        return up ? -1 : 1
+      }
+      // a должно быть равным b
+      return 0;
+    })
+  } else {
+    return books.sort(function (a, b) {
+      if (a[field].rus > b[field].rus) {
+        return up ? 1 : -1
+      }
+      if (a[field].rus < b[field].rus) {
+        return up ? -1 : 1
+      }
+      // a должно быть равным b
+      return 0;
+    })
+  }
 }
 
 export function sort() {

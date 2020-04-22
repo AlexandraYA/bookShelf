@@ -50,8 +50,8 @@ class ManageBooks extends Component {
       return (
         <tr key={book.id}>
           <th scope="row">{book.id}</th>
-          <td>{book.author}</td>
-          <td>{book.name}</td>
+          <td>{book.author.rus}</td>
+          <td>{book.name.rus}</td>
           <td>{book.place}</td>
           <td>{book.year}</td>
           <td>
