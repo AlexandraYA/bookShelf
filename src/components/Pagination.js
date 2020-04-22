@@ -46,7 +46,7 @@ const Pagination = props => {
         </li>
 
         { pages.map(page => (
-          <li className={ currentPage === page.number ? "page-item active" : "page-item" }>
+          <li key={page.number} className={ currentPage === page.number ? "page-item active" : "page-item" }>
             <a
               className="page-link"
               href="/"

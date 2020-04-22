@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconCaretUp, IconCaretDown } from '../icons'
+import { IconCaretUp, IconCaretDown } from './icons'
 
 
 export const ButtonDown = props => (

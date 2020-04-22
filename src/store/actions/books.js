@@ -14,21 +14,7 @@ import sortTypes from '../../utils/sortTypes.json'
 export function fetchBooks(page = null) {
   return (dispatch, getState) => {
     const state = getState()
-    let books = []
-
-    if (state.app.filterSettings.search.length) {
-      books = doSearch(state.app.filterSettings.searchField, state.app.filterSettings.search, state.books.books)
-    }
-
-    if (state.app.filterSettings.filter.length) {
-      const startBooksArr = books.length ? books : state.books.books
-      books = doFilter(state.app.filterSettings.filter, startBooksArr)
-    }
-
-    if (state.app.filterSettings.sortType.length) {
-      const startBooksArr = books.length ? books : state.books.books
-      books = doSort(state.app.filterSettings.sortType, startBooksArr)
-    }
+    let books = getBooksTreated(state.app.filterSettings, state.books.books)
 
     const currentPage = page || 1
     const booksPerPage = state.books.booksPerPage
@@ -142,19 +128,8 @@ export function getBookById(bookId) {
 export function searchIntoAllFields() {
   return (dispatch, getState) => {
     const state = getState()
-    const value = state.app.filterSettings.search
-    let resultsInAuthors = state.books.books.filter(book => {
-      if (book.author.toLowerCase().includes(value.toLowerCase())) {
-        return book
-      }
-    })
-    let resultsInNames = state.books.books.filter(book => {
-      if (book.name.toLowerCase().includes(value.toLowerCase())) {
-        return book
-      }
-    })
+    let books = getBooksTreated(state.app.filterSettings, state.books.books)
 
-    let books = resultsInAuthors.concat(resultsInNames)
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
     const offset = 0
@@ -177,7 +152,7 @@ function doSearch(field, value, books) {
 export function search() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = doSearch(state.app.filterSettings.searchField, state.app.filterSettings.search, state.books.books)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, state.app.filterSettings.searchField)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -201,7 +176,7 @@ function doFilter(place, books) {
 export function filter() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = doFilter(state.app.filterSettings.filter, state.books.books)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -240,7 +215,7 @@ function doSort(sortType, books) {
 export function sort() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = doSort(state.app.filterSettings.sortType, state.books.booksShow)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -251,6 +226,34 @@ export function sort() {
 
     dispatch(showBooksList(booksForPage, currentPage, count, allPages))
   }
+}
+
+function getBooksTreated(filterSettings, stateBooks, field = null) {
+  let books = []
+
+  if (filterSettings.search.length) {
+    if (field) {
+      books = doSearch(field, filterSettings.search, stateBooks)
+    } else {
+      books = doSearch('author', filterSettings.search, stateBooks)
+      let books2 = doSearch('name', filterSettings.search, stateBooks)
+      if (books2.length) {
+        books = books.concat(books2)
+      }
+    }
+  }
+
+  if (filterSettings.filter.length) {
+    const startBooksArr = books.length ? books : stateBooks
+    books = doFilter(filterSettings.filter, startBooksArr)
+  }
+
+  if (filterSettings.sortType.length) {
+    const startBooksArr = books.length ? books : stateBooks
+    books = doSort(filterSettings.sortType, startBooksArr)
+  }
+
+  return books.length ? books : stateBooks
 }
 
 function showBooksList(booksForPage, currentPage, count, allPages) {

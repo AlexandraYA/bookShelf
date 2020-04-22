@@ -85,9 +85,10 @@ class ManageBooks extends Component {
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
                 <div>
                   <select
-                  className="custom-select mr-sm-2" 
+                  className="custom-select mr-sm-2"
+                  value={this.props.defaultFilter}
                   onChange={event => this.props.changeFilterValue(event.target.value)}>
-                    <option>Выберите полку</option>
+                    <option value="">Выберите полку</option>
                     {
                       this.props.places.length
                       ? this.props.places.map(place => (
@@ -182,7 +183,8 @@ class ManageBooks extends Component {
 function mapStateToProps(state) {
   return {
     books: state.books.booksShow,
-    places: state.places.places
+    places: state.places.places,
+    defaultFilter: state.app.filterSettings.filter
   }
 }
 
