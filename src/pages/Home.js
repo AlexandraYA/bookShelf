@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Layout from '../components/Layout'
 import SettingsBlock from '../components/SettingsBlock/SettingsBlock'
 import { Card } from '../components/Card'
+import Loader from '../components/UI/Loader/Loader'
 import { fetchBooks } from '../store/actions/books'
 import belka from '../belka.jpg'
 import { Alert } from '../components/Alert'
@@ -15,6 +16,13 @@ class Home extends Component {
   }
 
   render() {
+
+    if (!this.props.books.length && this.props.loading) {
+      return (
+        <Loader />
+      )
+    }
+
     return (
       <Layout withHeader={true}>
         <div>
@@ -23,7 +31,10 @@ class Home extends Component {
 
           <SettingsBlock />
 
-          <div className="row">
+          <div
+            ref={loadingRef => (this.loadingRef = loadingRef)}
+            className="row"
+          >
             { this.props.books.map((book, index) => {
               return (
                 <div
@@ -36,6 +47,8 @@ class Home extends Component {
                 </div>
               )
             }) }
+
+            {this.props.loading ? <Loader /> : null}
           </div>
         </div>
       </Layout>
@@ -45,6 +58,7 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
+    loading: state.app.loading,
     books: state.books.booksShow,
     showAlert: state.app.showAlert
   }

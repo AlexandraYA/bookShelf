@@ -13,6 +13,9 @@ export const HIDE_ALERT = 'HIDE_ALERT'
 export const SHOW_MODAL = 'SHOW_MODAL'
 export const HIDE_MODAL = 'HIDE_MODAL'
 
+export const SHOW_LOADER = 'SHOW_LOADER'
+export const HIDE_LOADER = 'HIDE_LOADER'
+
 export const CREATE_PLACE = 'CREATE_PLACE'
 export const DELETE_PLACE = 'DELETE_PLACE'
 export const SAVE_PLACE_CODE = 'SAVE_PLACE_CODE'

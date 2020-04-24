@@ -7,12 +7,15 @@ import {
   DELETE_BOOK,
   SAVE_BOOK_ID
 } from './actionTypes'
-import { showAlert, hideAlert, showModal, saveSortValue } from './app'
+import { showLoader, hideLoader, showAlert, hideAlert, showModal, saveSortValue } from './app'
 import sortTypes from '../../data/sortTypes.json'
 
 
 export function fetchBooks(page = null) {
   return (dispatch, getState) => {
+
+    dispatch(showLoader())
+
     const state = getState()
     let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
 
@@ -23,6 +26,7 @@ export function fetchBooks(page = null) {
     const booksForPage = treatedBooks.slice(offset, offset + booksPerPage)
     const count = treatedBooks.length
     const allPages = Math.ceil(count / booksPerPage)
+    dispatch(hideLoader())
 
     return dispatch(showBooksList(booksForPage, currentPage, count, allPages))
   }
