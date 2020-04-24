@@ -7,7 +7,7 @@ import {
   DELETE_BOOK,
   SAVE_BOOK_ID
 } from '../actions/actionTypes'
-import storage from '../../utils/books.json'
+import storage from '../../data/books.json'
 
 
 const initialState = {

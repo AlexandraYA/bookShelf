@@ -4,6 +4,7 @@ import Layout from '../components/Layout'
 import belka from '../belka.jpg'
 import { getBookById } from '../store/actions/books'
 import Loader from '../components/UI/Loader/Loader'
+import places from '../data/places.json'
 
 
 class BookDetail extends Component {
@@ -13,6 +14,7 @@ class BookDetail extends Component {
   }
 
   render() {
+    const bookPlace = this.props.book.place
     return (
       <Layout withHeader={true}>
         <div className="container">
@@ -20,7 +22,7 @@ class BookDetail extends Component {
             this.props.book
               ? (
                 <div>
-                  <h1>{this.props.book.name}</h1>
+                  <h1>{this.props.book.name.rus}</h1>
                   <div className="row">
                     <div className="col-4">
                       <img src={belka} alt="Обложка книги" />
@@ -28,13 +30,13 @@ class BookDetail extends Component {
                     <div className="col-8">
                       <ul className="list-group">
                         <li className="list-group-item">
-                          <strong>Автор:</strong> {this.props.book.author}
+                          <strong>Автор:</strong> {this.props.book.author.rus}
                         </li>
                         <li className="list-group-item">
                           <strong>Год:</strong> {this.props.book.year}
                         </li>
                         <li className="list-group-item">
-                          <strong>Месторасположение:</strong> {this.props.book.place}
+                          <strong>Месторасположение:</strong> {bookPlace ? places[bookPlace].name.rus : ""}
                         </li>
                       </ul>
                     </div>

@@ -7,30 +7,19 @@ import InlineForm from './InlineForm'
 
 class Filter extends Component {
 
-  state = {
-    places: []
-  }
-
-  componentDidMount() {
-    const places = this.props.places.map(place => {
-      return {text: place.name, value: place.name}
-    })
-
-    this.setState({
-      places: places
-    })
-  }
-
   startFiltering = (event) => {
     event.preventDefault()
     this.props.filter()
   }
 
-  resetFilter() {
-    this.props.resetSettings()
-  }
-
   render() {
+    let placesToOptions = Object.values(this.props.places).map(value => {
+      return {
+        value: value.code,
+        text: value.name.rus
+      }
+    })
+
     return (
       <InlineForm
         wrappedSelect={false}
@@ -44,7 +33,7 @@ class Filter extends Component {
           selectLabel: "Выберите полку",
           defaultValue: this.props.place,
           onChange: event => this.props.changeFilterValue(event.target.value),
-          options: this.state.places
+          options: placesToOptions
         }}
       />
     )

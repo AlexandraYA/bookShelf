@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from '../components/Layout'
-import { createControl, validate } from '../form/formFramework'
+import { createControl, validate, validateForm } from '../form/formFramework'
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import { Alert } from '../components/Alert'
@@ -9,14 +9,26 @@ import { IconTrash } from '../components/UI/icons'
 import { createPlace, deletePlace, beforeDeletePlace } from '../store/actions/places'
 
 
+function createTextInputControl(label) {
+  return createControl({
+    label: label,
+    labelClass: "sr-only",
+    errorMessage: "Минимальная длина 3 символа"
+  }, {required: true, minLength: 3});
+};
+
+function createFormControls() {
+  return {
+    rusName: createTextInputControl("Название на русском"),
+    engName: createTextInputControl("Название на английском"),
+    code: createTextInputControl("Код")
+  };
+};
+
 class ManagePlaces extends Component {
 
   state = {
-    newPlace: createControl({
-      label: "Название месторасположения книг",
-      labelClass: "sr-only",
-      errorMessage: "Минимальная длина 3 символа"
-    }, {required: true, minLength: 3}),
+    formControls: createFormControls(),
     isFormValid: false,
     regim: "create",
     alert: {
@@ -35,46 +47,69 @@ class ManagePlaces extends Component {
     event.preventDefault()
   }
 
-  changeHandler = (value) => {
-    let place = {...this.state.newPlace}
-    place.value = value
-    place.touched = true
-    place.valid = validate(place.value, place.validation)
+  changeHandler = (value, controlName) => {
+    const formControls = { ...this.state.formControls };
+    const control = { ...formControls[controlName] };
+
+    control.value = value
+    control.touched = true
+    control.valid = validate(control.value, control.validation)
+
+    formControls[controlName] = control
 
     this.setState({
-      newPlace: place,
-      isFormValid: place.valid
+      formControls,
+      isFormValid: validateForm(formControls)
     })
   }
 
   deletePlaceHandler = () => {
-    this.props.deletePlace(this.state.placeToDeleteId)
-    this.setState({
-      regim: 'delete',
-      placeToDeleteId: null
-    })
+    this.props.deletePlace()
   }
 
-  openDeleteModal = (placeId) => {
-
-    this.props.beforeDeletePlace(placeId)
-
-    this.setState({
-      placeToDeleteId: placeId
-    })
+  openDeleteModal = (placeCode, placeName) => {
+    this.props.beforeDeletePlace(placeCode, placeName)
   }
 
-  createPlaceHandler = () => {
-    if (this.state.newPlace.valid) {
+  createPlaceHandler = event => {
+    event.preventDefault()
 
-      this.props.createPlace(this.state.newPlace)
+    const {rusName, engName, code} = this.state.formControls;
 
-      this.setState({
-        regim: "create",
-        newPlace: {...this.state.newPlace, value: "", valid: false, touched: false},
-        isFormValid: false
-      })
+    const place = {
+      rusName: rusName.value,
+      engName: engName.value,
+      code: code.value
     }
+
+    this.props.createPlace(place)
+
+    this.setState({
+      regim: 'create',
+      formControls: createFormControls(),
+      isFormValid: false
+    })
+  }
+
+  renderInputs = () => {
+    return Object.keys(this.state.formControls).map((controlName, index) => {
+      const control = this.state.formControls[controlName]
+
+      return (
+          <Input
+            key={controlName + index}
+            label={control.label}
+            labelClass={control.labelClass}
+            value={control.value}
+            type={control.type}
+            valid={control.valid}
+            shouldValidate={!!control.validation}
+            touched={control.touched}
+            errorMessage={control.errorMessage}
+            onChange={event => this.changeHandler(event.target.value, controlName)}
+          />
+      );
+    });
   }
 
   render() {
@@ -88,11 +123,11 @@ class ManagePlaces extends Component {
           <div className="row justify-content-center mb-4">
             <div className="col-6">
               <ul className="list-group">
-                { this.props.places.map(place => (
-                  <li key={place.id} className="list-group-item d-flex justify-content-between">
-                    <span>{place.name}</span>
+                { Object.values(this.props.places).map(place => (
+                  <li key={place.code} className="list-group-item d-flex justify-content-between">
+                    <span>{place.name.rus}</span>
                     <Button
-                      onClick={() => this.openDeleteModal(place.id)}
+                      onClick={() => this.openDeleteModal(place.code, place.name.rus)}
                       disabled={false}
                       className="btn btn-danger btn-sm"
                     >
@@ -104,17 +139,9 @@ class ManagePlaces extends Component {
             </div>
             <div className="col-6">
               <form onSubmit={this.onSubmitHandler}>
-                <Input
-                  label={this.state.newPlace.label}
-                  labelClass={this.state.newPlace.labelClass}
-                  value={this.state.newPlace.value}
-                  type={this.state.newPlace.type}
-                  valid={this.state.newPlace.valid}
-                  shouldValidate={!!this.state.newPlace.validation}
-                  touched={this.state.newPlace.touched}
-                  errorMessage={this.state.newPlace.errorMessage}
-                  onChange={event => this.changeHandler(event.target.value)}
-                />
+
+                { this.renderInputs() }
+
                 <Button
                     onClick={this.createPlaceHandler}
                     disabled={!this.state.isFormValid}

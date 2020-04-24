@@ -6,6 +6,7 @@ import Layout from '../components/Layout'
 import Pagination from '../components/Pagination'
 import { fetchBooks, toPageEditBook, beforeDeleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
+import places from '../data/places.json'
 
 
 class ManageBooks extends Component {
@@ -52,7 +53,7 @@ class ManageBooks extends Component {
           <th scope="row">{book.id}</th>
           <td>{book.author.rus}</td>
           <td>{book.name.rus}</td>
-          <td>{book.place}</td>
+          <td>{places[book.place].name.rus}</td>
           <td>{book.year}</td>
           <td>
             <button
@@ -64,7 +65,7 @@ class ManageBooks extends Component {
             </button>
             <button
               type="button"
-              onClick={() => this.props.deleteBookHandle(book.id)}
+              onClick={() => this.props.deleteBookHandle(book.id, book.name.rus)}
               className="btn btn-danger btn-sm"
             >
               <IconTrash />
@@ -90,9 +91,9 @@ class ManageBooks extends Component {
                   onChange={event => this.props.changeFilterValue(event.target.value)}>
                     <option value="">Выберите полку</option>
                     {
-                      this.props.places.length
-                      ? this.props.places.map(place => (
-                        <option key={place.name + place.id} value={place.name}>{place.name}</option>
+                      Object.values(this.props.places).length
+                      ? Object.values(this.props.places).map(place => (
+                        <option key={place.name.rus + place.id} value={place.code}>{place.name.rus}</option>
                       ))
                       : <option disabled>Нет полок</option>
                     }

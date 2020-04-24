@@ -21,19 +21,25 @@ function createTextInputControl(label, value) {
 
 function createFormControls(initialBook) {
 
-  let author = '';
-  let name = '';
+  let rusAuthor = '';
+  let engAuthor = '';
+  let rusName = '';
+  let engName = '';
   let year = '';
 
   if (initialBook) {
-    author = initialBook.author;
-    name = initialBook.name;
+    rusAuthor = initialBook.author.rus;
+    engAuthor = initialBook.author.eng;
+    rusName = initialBook.name.rus;
+    engName = initialBook.name.eng;
     year = initialBook.year;
   }
 
   return {
-    author: createTextInputControl("Автор", author),
-    name: createTextInputControl("Название", name),
+    rusAuthor: createTextInputControl("Автор (по-русски)", rusAuthor),
+    engAuthor: createTextInputControl("Автор (по-английски)", engAuthor),
+    rusName: createTextInputControl("Название (по-русски)", rusName),
+    engName: createTextInputControl("Название (по-английски)", engName),
     year: createTextInputControl("Год издания", year),
     image: createControl({
       label: "Фотография обложки",
@@ -48,13 +54,13 @@ class EditBook extends Component {
   state = {
     isFormValid: true,
     formControls: createFormControls(),
-    placeName: ''
+    placeCode: ''
   }
 
   componentDidMount() {
     this.setState({
       formControls: createFormControls(this.props.book),
-      placeName: this.props.book.place
+      placeCode: this.props.book.place
     })
   }
 
@@ -65,14 +71,20 @@ class EditBook extends Component {
   addBookHandler = event => {
     event.preventDefault()
 
-    const {author, name, year, image} = this.state.formControls;
+    const {rusAuthor, engAuthor, rusName, engName, year, image} = this.state.formControls;
 
     const book = {
       id: this.props.book.id,
-      author: author.value,
-      name: name.value,
+      author: {
+        rus: rusAuthor.value,
+        eng: engAuthor.value
+      },
+      name: {
+        rus: rusName.value,
+        eng: engName.value
+      },
       year: year.value,
-      place: this.state.placeName,
+      place: this.state.placeCode,
       image: image.value ? image.value : this.props.book.value
     }
 
@@ -81,7 +93,7 @@ class EditBook extends Component {
     this.setState({
       isFormValid: false,
       formControls: createFormControls(),
-      placeName: this.props.places[0].name
+      placeCode: Object.keys(this.props.places)[0]
     });
   }
 
@@ -103,7 +115,7 @@ class EditBook extends Component {
 
   selectChangeHandler = (value) => {
     this.setState({
-      placeName: value
+      placeCode: value
     })
   }
 
@@ -131,12 +143,12 @@ class EditBook extends Component {
   render() {
     const select = <Select
           label="Месторасположение"
-          value={this.state.placeName}
+          value={this.state.placeCode}
           onChange={event => this.selectChangeHandler(event.target.value)}
-          options={this.props.places.map(place => {
+          options={Object.values(this.props.places).map(place => {
                     return {
-                      text: place.name,
-                      value: place.name
+                      text: place.name.rus,
+                      value: place.code
                     }
                   })}
           />

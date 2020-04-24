@@ -1,4 +1,4 @@
-import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_ID } from './actionTypes'
+import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_CODE } from './actionTypes'
 import { showAlert, hideAlert, showModal } from './app'
 
 
@@ -8,7 +8,17 @@ export function createPlace(place) {
 
     dispatch({
       type: CREATE_PLACE,
-      places: [...state.places, { id: state.places.length + 1, name: place.value }]
+      places: {...state.places,
+        [place.code]: {
+          id: Object.keys(state.places).length + 1,
+          name: {
+            rus: place.rusName,
+            eng: place.engName,
+            code: place.code
+          },
+          code: place.code
+        }
+      }
     })
 
     dispatch(showAlert())
@@ -20,13 +30,10 @@ export function createPlace(place) {
   }
 }
 
-export function beforeDeletePlace(placeId) {
+export function beforeDeletePlace(placeCode, placeName) {
   return (dispatch, getState) => {
     const stateBooks = getState().books.books
-    const statePlaces = getState().places.places
-
-    const place = statePlaces.find(place => place.id === placeId)
-    const books = stateBooks.filter(book => book.place === place.name)
+    const books = stateBooks.filter(book => book.place === placeCode)
 
     if (books.length) {
       dispatch(showModal({
@@ -34,11 +41,11 @@ export function beforeDeletePlace(placeId) {
       }))
     } else {
       dispatch({
-        type: SAVE_PLACE_ID,
-        placeId
+        type: SAVE_PLACE_CODE,
+        placeCode
       })
       dispatch(showModal({
-        title: 'Удаление месторасположения ' + place.name,
+        title: 'Удаление месторасположения ' + placeName,
         text: 'Вы уверены?',
         actionBtn: 'Удалить',
         closeBtn: 'Отмена'
@@ -50,7 +57,8 @@ export function beforeDeletePlace(placeId) {
 export function deletePlace() {
   return (dispatch, getState) => {
     const state = getState().places
-    let places = state.places.filter(place => place.id !== state.placeToDeleteId)
+    let places = {...state.places}
+    delete places[state.placeToDeleteCode]
 
     dispatch({
       type: DELETE_PLACE,

@@ -9,7 +9,7 @@ import {
   SAVE_SEARCH_VALUE,
   SAVE_SEARCH_FIELD_VALUE
 } from '../actions/actionTypes'
-import sortTypesSelect from '../../utils/sortTypesSelect.json'
+import sortTypesSelect from '../../data/sortTypesSelect.json'
 
 const defaultFilterSettings = {
   search: '',

@@ -8,7 +8,7 @@ import {
   SAVE_BOOK_ID
 } from './actionTypes'
 import { showAlert, hideAlert, showModal, saveSortValue } from './app'
-import sortTypes from '../../utils/sortTypes.json'
+import sortTypes from '../../data/sortTypes.json'
 
 
 export function fetchBooks(page = null) {
@@ -40,17 +40,14 @@ export function toPageEditBook(bookId, history) {
   }
 }
 
-export function beforeDeleteBook(bookId) {
+export function beforeDeleteBook(bookId, bookName) {
   return (dispatch, getState) => {
-    const stateBooks = getState().books.books
-    const book = stateBooks.find(book => book.id === bookId)
-
     dispatch({
       type: SAVE_BOOK_ID,
       bookId
     })
     dispatch(showModal({
-      title: 'Удаление книги ' + book.name,
+      title: 'Удаление книги ' + bookName,
       text: 'Вы уверены?',
       actionBtn: 'Удалить',
       closeBtn: 'Отмена',

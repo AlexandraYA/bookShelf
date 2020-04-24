@@ -19,8 +19,10 @@ function createTextInputControl(label) {
 
 function createFormControls() {
   return {
-    author: createTextInputControl("Автор"),
-    name: createTextInputControl("Название"),
+    rusAuthor: createTextInputControl("Автор (по-русски)"),
+    engAuthor: createTextInputControl("Автор (по-английски)"),
+    rusName: createTextInputControl("Название (по-русски)"),
+    engName: createTextInputControl("Название (по-английски)"),
     year: createTextInputControl("Год издания"),
     image: createControl({
       label: "Фотография обложки",
@@ -35,12 +37,12 @@ class CreateBook extends Component {
   state = {
     isFormValid: false,
     formControls: createFormControls(),
-    placeName: ''
+    placeCode: ''
   }
 
   componentDidMount() {
     this.setState({
-      placeName: this.props.places.length ? this.props.places[0].name : ''
+      placeCode: this.props.places.length ? this.props.places[0].code : ''
     })
   }
 
@@ -51,13 +53,19 @@ class CreateBook extends Component {
   addBookHandler = event => {
     event.preventDefault()
 
-    const {author, name, year, image} = this.state.formControls;
+    const {rusAuthor, engAuthor, rusName, engName, year, image} = this.state.formControls;
 
     const book = {
-      author: author.value,
-      name: name.value,
+      author: {
+        rus: rusAuthor.value,
+        eng: engAuthor.value
+      },
+      name: {
+        rus: rusName.value,
+        eng: engName.value
+      },
       year: year.value,
-      place: this.state.placeName,
+      place: this.state.placeCode,
       image: image.value
     }
 
@@ -66,7 +74,7 @@ class CreateBook extends Component {
     this.setState({
       isFormValid: false,
       formControls: createFormControls(),
-      placeName: this.props.places[0].name
+      placeCode: Object.keys(this.props.places)[0]
     });
   }
 
@@ -88,7 +96,7 @@ class CreateBook extends Component {
 
   selectChangeHandler = (value) => {
     this.setState({
-      placeName: value
+      placeCode: value
     })
   }
 
@@ -116,12 +124,12 @@ class CreateBook extends Component {
   render() {
     const select = <Select
           label="Месторасположение"
-          value={this.state.placeName}
+          value={this.state.placeCode}
           onChange={event => this.selectChangeHandler(event.target.value)}
-          options={this.props.places.map(place => {
+          options={Object.values(this.props.places).map(place => {
                     return {
-                      text: place.name,
-                      value: place.name
+                      text: place.name.rus,
+                      value: place.code
                     }
                   })}
         />

@@ -1,33 +1,9 @@
-import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_ID } from '../actions/actionTypes'
+import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_CODE } from '../actions/actionTypes'
+import places from '../../data/places.json'
 
 const initialState = {
-  places: [
-    {
-      id: 1,
-      name: "на шкафу Икея"
-    },
-    {
-      id: 2,
-      name: "трельяж"
-    },
-    {
-      id: 3,
-      name: "шкаф у двери 2 снизу"
-    },
-    {
-      id: 4,
-      name: "шкаф у двери левая верхняя"
-    },
-    {
-      id: 3,
-      name: "шкаф у двери нижняя"
-    },
-    {
-      id: 4,
-      name: "шкаф у двери правая верхняя"
-    }
-  ],
-  placeToDeleteId: null
+  places: places,
+  placeToDeleteCode: null
 }
 
 export default function placesReducer (state = initialState, action) {
@@ -41,12 +17,13 @@ export default function placesReducer (state = initialState, action) {
     case DELETE_PLACE:
       return {
         ...state,
-        places: action.places
+        places: action.places,
+        placeToDeleteCode: null
       }
-    case SAVE_PLACE_ID:
+    case SAVE_PLACE_CODE:
       return {
         ...state,
-        placeToDeleteId: action.placeId
+        placeToDeleteCode: action.placeCode
       }
     default:
       return state
