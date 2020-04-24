@@ -5,6 +5,7 @@ import SettingsBlock from '../components/SettingsBlock/SettingsBlock'
 import { Card } from '../components/Card'
 import { fetchBooks } from '../store/actions/books'
 import belka from '../belka.jpg'
+import { Alert } from '../components/Alert'
 
 
 class Home extends Component {
@@ -18,6 +19,7 @@ class Home extends Component {
       <Layout withHeader={true}>
         <div>
           <h1>Все книги здесь</h1>
+          { this.props.showAlert ? <Alert text="Ничего не найдено" className="danger" /> : null }
 
           <SettingsBlock />
 
@@ -43,7 +45,8 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.booksShow
+    books: state.books.booksShow,
+    showAlert: state.app.showAlert
   }
 }
 

@@ -4,6 +4,7 @@ import { IconTrash, IconPencil } from '../components/UI/icons'
 import { ButtonUp, ButtonDown } from '../components/UI/CaretButtons'
 import Layout from '../components/Layout'
 import Pagination from '../components/Pagination'
+import { Alert } from '../components/Alert'
 import { fetchBooks, toPageEditBook, beforeDeleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
 import places from '../data/places.json'
@@ -81,6 +82,7 @@ class ManageBooks extends Component {
       <Layout withHeader={true}>
         <div>
           <h1>Управление Библиотекой</h1>
+          { this.props.showAlert ? <Alert text="Ничего не найдено" className="danger" /> : null }
           <div className="row mt-4">
             <div className="col-auto">
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
@@ -115,6 +117,7 @@ class ManageBooks extends Component {
                     type="text"
                     className="form-control"
                     placeholder="Что будем искать?"
+                    value={this.props.search}
                     onChange={event => this.props.changeSearchValue(event.target.value)}
                   />
                 </div>
@@ -185,7 +188,9 @@ function mapStateToProps(state) {
   return {
     books: state.books.booksShow,
     places: state.places.places,
-    defaultFilter: state.app.filterSettings.filter
+    defaultFilter: state.app.filterSettings.filter,
+    showAlert: state.app.showAlert,
+    search: state.app.filterSettings.search
   }
 }
 

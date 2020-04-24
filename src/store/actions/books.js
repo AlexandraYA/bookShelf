@@ -14,7 +14,7 @@ import sortTypes from '../../data/sortTypes.json'
 export function fetchBooks(page = null) {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
 
     const currentPage = page || 1
     const booksPerPage = state.books.booksPerPage
@@ -125,7 +125,7 @@ export function getBookById(bookId) {
 export function searchIntoAllFields() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -149,7 +149,7 @@ function doSearch(field, value, books) {
 export function search() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books, state.app.filterSettings.searchField)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.filterSettings.searchField)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -173,7 +173,7 @@ function doFilter(place, books) {
 export function filter() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -225,7 +225,7 @@ function doSort(sortType, books) {
 export function sort() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
 
     const currentPage = 1
     const booksPerPage = state.books.booksPerPage
@@ -238,7 +238,7 @@ export function sort() {
   }
 }
 
-function getBooksTreated(filterSettings, stateBooks, field = null) {
+function getBooksTreated(filterSettings, stateBooks, dispatch, field = null) {
   let books = []
 
   if (filterSettings.search.length) {
@@ -250,6 +250,15 @@ function getBooksTreated(filterSettings, stateBooks, field = null) {
       if (books2.length) {
         books = books.concat(books2)
       }
+    }
+
+    if (!books.length) {
+      dispatch(showAlert())
+
+      let setTimeoutId = setTimeout(() => {
+        dispatch(hideAlert())
+        clearTimeout(setTimeoutId)
+      }, 2000)
     }
   }
 
