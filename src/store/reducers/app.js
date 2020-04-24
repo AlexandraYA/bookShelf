@@ -9,7 +9,7 @@ import {
   SAVE_SEARCH_VALUE,
   SAVE_SEARCH_FIELD_VALUE
 } from '../actions/actionTypes'
-import sortTypesSelect from '../../data/sortTypesSelect.json'
+import sortTypes from '../../data/sortTypes.json'
 
 const defaultFilterSettings = {
   search: '',
@@ -27,7 +27,7 @@ const initialState = {
   modalActionBtn: '',
   modalAction: null,
   typeModal: 'deletePlace',
-  sortTypes: sortTypesSelect,
+  sortTypes: sortTypes.sortTypes,
   filterSettings: defaultFilterSettings
 }
 

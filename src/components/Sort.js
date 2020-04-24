@@ -26,7 +26,12 @@ class Sort extends Component {
           selectLabel: "Выберите тип сортировки",
           defaultValue: this.props.sortType,
           onChange: event => this.props.changeSortValue(event.target.value),
-          options: this.props.sortTypes
+          options: Object.keys(this.props.sortTypes).map(key => {
+                          return {
+                            text: this.props.sortTypes[key].text,
+                            value: key
+                          }
+                        })
         }}
       />
     )
