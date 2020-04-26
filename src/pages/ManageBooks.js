@@ -5,9 +5,18 @@ import { ButtonUp, ButtonDown } from '../components/UI/CaretButtons'
 import Layout from '../components/Layout'
 import Pagination from '../components/Pagination'
 import { Alert } from '../components/Alert'
-import { fetchBooks, toPageEditBook, beforeDeleteBook, setSortTypeAndSort, filter, searchIntoAllFields } from '../store/actions/books'
+import {
+  setPageType,
+  fetchBooks,
+  toPageEditBook,
+  beforeDeleteBook,
+  setSortTypeAndSort,
+  filter,
+  searchIntoAllFields
+} from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
 import places from '../data/places.json'
+import pageTypes from '../data/pageTypes.json'
 
 
 class ManageBooks extends Component {
@@ -19,6 +28,7 @@ class ManageBooks extends Component {
   }
 
   componentDidMount() {
+    this.props.setPageType(pageTypes.OTHER)
     this.props.fetchBooks();
   }
 
@@ -196,6 +206,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setPageType: type => dispatch(setPageType(type)),
     fetchBooks: () => dispatch(fetchBooks()),
     editBookHandle: (bookId, history) => dispatch(toPageEditBook(bookId, history)),
     deleteBookHandle: bookId => dispatch(beforeDeleteBook(bookId)),

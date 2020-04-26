@@ -67,7 +67,7 @@ export function hideModal() {
 export function resetFilterSettings() {
   return dispatch => {
     dispatch({type: RESET_FILTER_SETTINGS})
-    dispatch(fetchBooks())
+    dispatch(fetchBooks(1))
   }
 }
 

@@ -2,26 +2,31 @@ import {
   CREATE_BOOK,
   GET_BOOK_BY_ID,
   FETCH_BOOKS,
+  CONTINUE_LIST,
   TO_PAGE_EDIT_BOOK,
   EDIT_BOOK,
   DELETE_BOOK,
-  SAVE_BOOK_ID
+  SAVE_BOOK_ID,
+  SET_PAGE_TYPE
 } from '../actions/actionTypes'
 import storage from '../../data/books.json'
+import pageTypes from '../../data/pageTypes.json'
 
+const InitialBook = {
+  id: null,
+  author: '',
+  name: '',
+  year: '',
+  place: '',
+  image: ''
+}
 
 const initialState = {
   books: storage.books,
   booksShow: [],
+  homeBooks: [],
+  pageType: pageTypes.HOME,
   book: {
-    id: null,
-    author: '',
-    name: '',
-    year: '',
-    place: '',
-    image: ''
-  },
-  initialBook: {
     id: null,
     author: '',
     name: '',
@@ -54,6 +59,19 @@ export default function booksReducer(state = initialState, action) {
         currentPage: action.currentPage,
         allPages: action.allPages
       }
+    case CONTINUE_LIST:
+      return {
+        ...state,
+        homeBooks: action.books,
+        count: action.count,
+        currentPage: action.currentPage,
+        allPages: action.allPages
+      }
+    case SET_PAGE_TYPE:
+      return {
+        ...state,
+        pageType: action.pageType
+      }
     case CREATE_BOOK:
       return {
         ...state,
@@ -85,7 +103,7 @@ export default function booksReducer(state = initialState, action) {
     case EDIT_BOOK:
       return {
         ...state,
-        book: { ...state.initialBook },
+        book: { ...InitialBook },
         books: [...action.editedBooks],
         booksShow: [...action.editedBooks]
       }

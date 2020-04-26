@@ -2,33 +2,29 @@ import {
   CREATE_BOOK,
   GET_BOOK_BY_ID,
   FETCH_BOOKS,
+  CONTINUE_LIST,
   TO_PAGE_EDIT_BOOK,
   EDIT_BOOK,
   DELETE_BOOK,
-  SAVE_BOOK_ID
+  SAVE_BOOK_ID,
+  SET_PAGE_TYPE
 } from './actionTypes'
 import { showLoader, hideLoader, showAlert, hideAlert, showModal, saveSortValue } from './app'
 import sortTypes from '../../data/sortTypes.json'
+import pageTypes from '../../data/pageTypes.json'
 
 
 export function fetchBooks(page = null) {
   return (dispatch, getState) => {
-
     dispatch(showLoader())
 
     const state = getState()
     let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
-
     const currentPage = page || 1
-    const booksPerPage = state.books.booksPerPage
-    const offset = booksPerPage * (currentPage - 1)
-    const treatedBooks = books.length ? books : state.books.books
-    const booksForPage = treatedBooks.slice(offset, offset + booksPerPage)
-    const count = treatedBooks.length
-    const allPages = Math.ceil(count / booksPerPage)
-    dispatch(hideLoader())
+    const homeBooks = page === 1 ? [] : state.books.homeBooks
 
-    return dispatch(showBooksList(booksForPage, currentPage, count, allPages))
+    dispatch(showBooksList(books, currentPage, state.books.booksPerPage, books.length, state.books.pageType, homeBooks))
+    return dispatch(hideLoader())
   }
 }
 
@@ -130,15 +126,14 @@ export function searchIntoAllFields() {
   return (dispatch, getState) => {
     const state = getState()
     let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
-
-    const currentPage = 1
-    const booksPerPage = state.books.booksPerPage
-    const offset = 0
-    const booksForPage = books.slice(offset, booksPerPage)
-    const count = books.length
-    const allPages = Math.ceil(count / booksPerPage)
-
-    return dispatch(showBooksList(booksForPage, currentPage, count, allPages))
+    return dispatch(showBooksList(
+      books,
+      1,
+      state.books.booksPerPage,
+      books.length,
+      state.books.pageType,
+      []
+    ))
   }
 }
 
@@ -154,15 +149,14 @@ export function search() {
   return (dispatch, getState) => {
     const state = getState()
     let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.filterSettings.searchField)
-
-    const currentPage = 1
-    const booksPerPage = state.books.booksPerPage
-    const offset = 0
-    const booksForPage = books.slice(offset, booksPerPage)
-    const count = books.length
-    const allPages = Math.ceil(count / booksPerPage)
-
-    return dispatch(showBooksList(booksForPage, currentPage, count, allPages))
+    return dispatch(showBooksList(
+      books,
+      1,
+      state.books.booksPerPage,
+      books.length,
+      state.books.pageType,
+      []
+    ))
   }
 }
 
@@ -178,15 +172,14 @@ export function filter() {
   return (dispatch, getState) => {
     const state = getState()
     let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
-
-    const currentPage = 1
-    const booksPerPage = state.books.booksPerPage
-    const offset = 0
-    const booksForPage = books.slice(offset, booksPerPage)
-    const count = books.length
-    const allPages = Math.ceil(count / booksPerPage)
-
-    return dispatch(showBooksList(booksForPage, currentPage, count, allPages))
+    return dispatch(showBooksList(
+      books,
+      1,
+      state.books.booksPerPage,
+      books.length,
+      state.books.pageType,
+      []
+    ))
   }
 }
 
@@ -230,15 +223,21 @@ export function sort() {
   return (dispatch, getState) => {
     const state = getState()
     let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
+    return dispatch(showBooksList(
+      books,
+      1,
+      state.books.booksPerPage,
+      books.length,
+      state.books.pageType,
+      []
+    ))
+  }
+}
 
-    const currentPage = 1
-    const booksPerPage = state.books.booksPerPage
-    const offset = 0
-    const booksForPage = books.slice(offset, booksPerPage)
-    const count = books.length
-    const allPages = Math.ceil(count / booksPerPage)
-
-    dispatch(showBooksList(booksForPage, currentPage, count, allPages))
+export function setPageType(pageType) {
+  return {
+    type: SET_PAGE_TYPE,
+    pageType
   }
 }
 
@@ -273,18 +272,32 @@ function getBooksTreated(filterSettings, stateBooks, dispatch, field = null) {
 
   if (filterSettings.sortType.length) {
     const startBooksArr = books.length ? books : stateBooks
-    books = doSort(filterSettings.sortType, startBooksArr)
+    books = doSort(filterSettings.sortType, [...startBooksArr])
   }
 
   return books.length ? books : stateBooks
 }
 
-function showBooksList(booksForPage, currentPage, count, allPages) {
-  return {
-    type: FETCH_BOOKS,
-    currentPage,
-    booksForPage,
-    count,
-    allPages
+function showBooksList(books, currentPage, booksPerPage, count, pageType = pageTypes.HOME, homeBooks = []) {
+
+  const offset = booksPerPage * (currentPage - 1)
+  const booksForPage = books.slice(offset, offset + booksPerPage)
+
+  if (pageType === pageTypes.HOME) {
+    return {
+      type: CONTINUE_LIST,
+      books: homeBooks.concat(booksForPage),
+      currentPage,
+      count,
+      allPages: Math.ceil(count / booksPerPage)
+    }
+  } else {
+    return {
+      type: FETCH_BOOKS,
+      currentPage,
+      booksForPage,
+      count,
+      allPages: Math.ceil(count / booksPerPage)
+    }
   }
 }

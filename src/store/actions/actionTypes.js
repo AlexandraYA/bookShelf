@@ -2,6 +2,8 @@ export const CREATE_BOOK = 'CREATE_BOOK'
 export const GET_BOOK_BY_ID = 'GET_BOOK_BY_ID'
 export const MODIFY_BOOKS_LIST = 'MODIFY_BOOKS_LIST'
 export const FETCH_BOOKS = 'FETCH_BOOKS'
+export const CONTINUE_LIST = 'CONTINUE_LIST'
+export const SET_PAGE_TYPE = 'SET_PAGE_TYPE'
 
 export const TO_PAGE_EDIT_BOOK = 'TO_PAGE_EDIT_BOOK'
 export const EDIT_BOOK = 'EDIT_BOOK'
