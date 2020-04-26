@@ -25,7 +25,7 @@ class BookDetail extends Component {
                   <h1>{this.props.book.name.rus}</h1>
                   <div className="row">
                     <div className="col-4">
-                      <img src={belka} alt="Обложка книги" />
+                      <img src={this.props.book.image ? this.props.book.image : belka} alt="Обложка книги" />
                     </div>
                     <div className="col-8">
                       <ul className="list-group">

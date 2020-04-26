@@ -23,12 +23,7 @@ function createFormControls() {
     engAuthor: createTextInputControl("Автор (по-английски)"),
     rusName: createTextInputControl("Название (по-русски)"),
     engName: createTextInputControl("Название (по-английски)"),
-    year: createTextInputControl("Год издания"),
-    image: createControl({
-      label: "Фотография обложки",
-      type: "file",
-      errorMessage: "Загрузите фотографию обложки"
-    }, {required: true})
+    year: createTextInputControl("Год издания")
   };
 };
 
@@ -37,12 +32,23 @@ class CreateBook extends Component {
   state = {
     isFormValid: false,
     formControls: createFormControls(),
+    image: createControl({
+      label: "Фотография обложки",
+      type: "file",
+      errorMessage: "Загрузите фотографию обложки"
+    }, {required: true}),
     placeCode: ''
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.uploadFileHandler.bind(this)
   }
 
   componentDidMount() {
     this.setState({
-      placeCode: this.props.places.length ? this.props.places[0].code : ''
+      placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''
     })
   }
 
@@ -53,7 +59,7 @@ class CreateBook extends Component {
   addBookHandler = event => {
     event.preventDefault()
 
-    const {rusAuthor, engAuthor, rusName, engName, year, image} = this.state.formControls;
+    const {rusAuthor, engAuthor, rusName, engName, year} = this.state.formControls;
 
     const book = {
       author: {
@@ -66,7 +72,7 @@ class CreateBook extends Component {
       },
       year: year.value,
       place: this.state.placeCode,
-      image: image.value
+      image: this.state.image.value
     }
 
     this.props.createBook(book, this.props.history)
@@ -74,13 +80,18 @@ class CreateBook extends Component {
     this.setState({
       isFormValid: false,
       formControls: createFormControls(),
+      image: createControl({
+        label: "Фотография обложки",
+        type: "file",
+        errorMessage: "Загрузите фотографию обложки"
+      }, {required: true}),
       placeCode: Object.keys(this.props.places)[0]
     });
   }
 
   changeHandler = (controlValue, controlName) => {
-    const formControls = { ...this.state.formControls };
-    const control = { ...formControls[controlName] };
+    const formControls = { ...this.state.formControls }
+    const control = { ...formControls[controlName] }
 
     control.touched = true;
     control.value = controlValue;
@@ -121,6 +132,18 @@ class CreateBook extends Component {
     });
   }
 
+  uploadFileHandler = (event) => {
+    const image = {...this.state.image}
+
+    image.touched = true
+    image.value = URL.createObjectURL(event.target.files[0])
+    image.valid = validate(image.value, image.validation)
+
+    this.setState({
+      image
+    })
+  }
+
   render() {
     const select = <Select
           label="Месторасположение"
@@ -149,6 +172,24 @@ class CreateBook extends Component {
                   { this.renderControls() }
 
                   { select }
+
+                  <Input
+                    label={this.state.image.label}
+                    labelClass={this.state.image.labelClass}
+                    type="file"
+                    valid={this.state.image.valid}
+                    shouldValidate={!!this.state.image.validation}
+                    touched={this.state.image.touched}
+                    errorMessage={this.state.image.errorMessage}
+                    onChange={this.uploadFileHandler}
+                  />
+
+                  <div className="mb-2">
+                    { this.state.image.value
+                        ? <img style={{width: '200px', height: '200px'}} src={this.state.image.value} alt="preview" />
+                        : null
+                    }
+                  </div>
 
                   <Button
                     onClick={this.addBookHandler}

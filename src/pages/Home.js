@@ -70,13 +70,14 @@ class Home extends Component {
             { this.props.books.length
               ?
               this.props.books.map((book, index) => {
+                const bookImage = book.image ? book.image : belka
                 return (
                   <div
                     key={`${book.id}-${Math.random()}`}
                     className="col-sm-4">
                     <Card
                       book={book}
-                      image={belka}
+                      image={bookImage}
                     />
                   </div>
                 )

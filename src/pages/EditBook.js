@@ -40,12 +40,7 @@ function createFormControls(initialBook) {
     engAuthor: createTextInputControl("Автор (по-английски)", engAuthor),
     rusName: createTextInputControl("Название (по-русски)", rusName),
     engName: createTextInputControl("Название (по-английски)", engName),
-    year: createTextInputControl("Год издания", year),
-    image: createControl({
-      label: "Фотография обложки",
-      type: "file",
-      errorMessage: "Загрузите фотографию обложки"
-    }, {required: true})
+    year: createTextInputControl("Год издания", year)
   };
 };
 
@@ -54,12 +49,19 @@ class EditBook extends Component {
   state = {
     isFormValid: true,
     formControls: createFormControls(),
+    image: {},
     placeCode: ''
   }
 
   componentDidMount() {
     this.setState({
       formControls: createFormControls(this.props.book),
+      image: createControl({
+        value: this.props.book.image,
+        label: "Фотография обложки",
+        type: "file",
+        errorMessage: "Загрузите фотографию обложки"
+      }, {required: true}),
       placeCode: this.props.book.place
     })
   }
@@ -71,7 +73,7 @@ class EditBook extends Component {
   addBookHandler = event => {
     event.preventDefault()
 
-    const {rusAuthor, engAuthor, rusName, engName, year, image} = this.state.formControls;
+    const {rusAuthor, engAuthor, rusName, engName, year} = this.state.formControls;
 
     const book = {
       id: this.props.book.id,
@@ -85,7 +87,7 @@ class EditBook extends Component {
       },
       year: year.value,
       place: this.state.placeCode,
-      image: image.value ? image.value : this.props.book.value
+      image: this.state.image.value ? this.state.image.value : this.props.book.image
     }
 
     this.props.editBookHandler(book, this.props.history)
@@ -93,6 +95,11 @@ class EditBook extends Component {
     this.setState({
       isFormValid: false,
       formControls: createFormControls(),
+      image: createControl({
+        label: "Фотография обложки",
+        type: "file",
+        errorMessage: "Загрузите фотографию обложки"
+      }, {required: true}),
       placeCode: Object.keys(this.props.places)[0]
     });
   }
@@ -140,6 +147,18 @@ class EditBook extends Component {
     });
   }
 
+  uploadFileHandler = (event) => {
+    const image = {...this.state.image}
+
+    image.touched = true
+    image.value = URL.createObjectURL(event.target.files[0])
+    image.valid = validate(image.value, image.validation)
+
+    this.setState({
+      image
+    })
+  }
+
   render() {
     const select = <Select
           label="Месторасположение"
@@ -168,6 +187,24 @@ class EditBook extends Component {
                   { this.renderControls() }
 
                   { select }
+
+                  <Input
+                    label={this.state.image.label}
+                    labelClass={this.state.image.labelClass}
+                    type="file"
+                    valid={this.state.image.valid}
+                    shouldValidate={!!this.state.image.validation}
+                    touched={this.state.image.touched}
+                    errorMessage={this.state.image.errorMessage}
+                    onChange={this.uploadFileHandler}
+                  />
+
+                  <div className="mb-2">
+                    { this.state.image.value
+                        ? <img style={{width: '200px', height: '200px'}} src={this.state.image.value} alt="preview" />
+                        : null
+                    }
+                  </div>
 
                   <Button
                     onClick={this.addBookHandler}
