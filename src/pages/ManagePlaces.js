@@ -119,10 +119,10 @@ class ManagePlaces extends Component {
       <Layout withHeader={true}>
         { this.props.showAlert ? <Alert text={alert[regim].text} className={alert[regim].class} /> : null }
         <div>
-          <h1 className="mb-5">Управление месторасположениями</h1>
+          <h1 className="mb-5 text-break">Управление месторасположениями</h1>
           <div className="row justify-content-center mb-4">
-            <div className="col-6">
-              <ul className="list-group">
+            <div className="col-md-6">
+              <ul className="list-group mb-5">
                 { Object.values(this.props.places).map(place => (
                   <li key={place.code} className="list-group-item d-flex justify-content-between">
                     <span>{place.name.rus}</span>
@@ -137,7 +137,7 @@ class ManagePlaces extends Component {
                 )) }
               </ul>
             </div>
-            <div className="col-6">
+            <div className="col-md-6">
               <form onSubmit={this.onSubmitHandler}>
 
                 { this.renderInputs() }

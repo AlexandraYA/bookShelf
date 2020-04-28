@@ -43,7 +43,7 @@ const InlineForm = props => {
 
         { props.wrappedSelect
           ? (
-            <div className="input-group-prepend">
+            <div className="input-group-prepend col-3 col-sm-4 px-0">
               { renderSelect() }
             </div>
           )

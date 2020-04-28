@@ -70,14 +70,14 @@ class ManageBooks extends Component {
             <button
               type="button"
               onClick={() => this.props.editBookHandle(book.id, this.props.history)}
-              className="btn btn-success btn-sm mr-1"
+              className="btn btn-success btn-sm mr-1 mb-1"
             >
               <IconPencil />
             </button>
             <button
               type="button"
               onClick={() => this.props.deleteBookHandle(book.id, book.name.rus)}
-              className="btn btn-danger btn-sm"
+              className="btn btn-danger btn-sm mb-1"
             >
               <IconTrash />
             </button>
@@ -94,11 +94,11 @@ class ManageBooks extends Component {
           <h1>Управление Библиотекой</h1>
           { this.props.showAlert ? <Alert text="Ничего не найдено" className="danger" /> : null }
           <div className="row mt-4">
-            <div className="col-auto">
+            <div className="col-auto mb-3">
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
-                <div>
+                <div className="mr-2">
                   <select
-                  className="custom-select mr-sm-2"
+                  className="custom-select"
                   value={this.props.defaultFilter}
                   onChange={event => this.props.changeFilterValue(event.target.value)}>
                     <option value="">Выберите полку</option>
@@ -122,7 +122,7 @@ class ManageBooks extends Component {
             </div>
             <div className="col-auto">
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
-                <div className="form-group mx-sm-3">
+                <div className="form-group mr-2 mb-0">
                   <input
                     type="text"
                     className="form-control"
