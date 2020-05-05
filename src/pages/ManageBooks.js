@@ -60,13 +60,13 @@ class ManageBooks extends Component {
   renderRows() {
     return this.props.books.map(book => {
       return (
-        <tr key={book.id}>
-          <th scope="row">{book.id}</th>
-          <td>{book.author.rus}</td>
-          <td>{book.name.rus}</td>
-          <td>{places[book.place].name.rus}</td>
-          <td>{book.year}</td>
-          <td>
+        <div className="row pt-2 border-bottom" key={book.id}>
+          <div className="col-sm-1 col-1 pb-2 pb-sm-0">{book.id}</div>
+          <div className="col-sm-2 col-5 pb-2 pb-sm-0">{book.author.rus}</div>
+          <div className="col-sm-3 col-5 pb-2 pb-sm-0">{book.name.rus}</div>
+          <div className="col-sm-2 col-5 pb-2 pb-sm-0">{places[book.place].name.rus}</div>
+          <div className="col-sm-2 col-3 pb-2 pb-sm-0">{book.year}</div>
+          <div className="col-sm-2 col-4 pb-2 pb-sm-0">
             <button
               type="button"
               onClick={() => this.props.editBookHandle(book.id, this.props.history)}
@@ -81,8 +81,8 @@ class ManageBooks extends Component {
             >
               <IconTrash />
             </button>
-          </td>
-        </tr>
+          </div>
+        </div>
       )
     })
   }
@@ -96,7 +96,7 @@ class ManageBooks extends Component {
           <div className="row mt-4">
             <div className="col-auto mb-3">
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
-                <div className="mr-2">
+                <div className="mr-2 mb-2">
                   <select
                   className="custom-select"
                   value={this.props.defaultFilter}
@@ -114,7 +114,7 @@ class ManageBooks extends Component {
                 <button
                   type="submit"
                   onClick={() => {this.props.filter()}}
-                  className="btn btn-outline-info"
+                  className="btn btn-outline-info mb-2"
                 >
                   Отфильтровать
                 </button>
@@ -122,7 +122,7 @@ class ManageBooks extends Component {
             </div>
             <div className="col-auto">
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
-                <div className="form-group mr-2 mb-0">
+                <div className="form-group mr-2 mb-2">
                   <input
                     type="text"
                     className="form-control"
@@ -134,7 +134,7 @@ class ManageBooks extends Component {
                 <button
                   type="submit"
                   onClick={event => {this.props.searchIntoAllFields(event.target.value)}}
-                  className="btn btn-outline-primary"
+                  className="btn btn-outline-primary mb-2"
                 >
                   Найти
                 </button>
@@ -144,45 +144,37 @@ class ManageBooks extends Component {
               <button type="submit" onClick={() => {this.props.reset()}} className="btn btn-outline-danger">Сбросить</button>
             </div>
           </div>
-          <div className="row justify-content-center mt-4">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">
+          <div className="justify-content-center my-4">
+            <div className="row pt-2 border-bottom">
+                  <div className="col-sm-1 col-1 pr-0">#</div>
+                  <div className="col-sm-2 col-5 pr-0 font-weight-bold">
                     {
                       this.state.sortAuthorUp
                       ? <ButtonUp onClick={() => this.sortAuthor("authorAZ")} />
                       : <ButtonDown onClick={() => this.sortAuthor("authorZA")} />
                     }
                     Автор
-                  </th>
-                  <th scope="col">
+                  </div>
+                  <div className="col-sm-3 col-6 pr-0 font-weight-bold">
                     {
                       this.state.sortNameUp
                       ? <ButtonUp onClick={() => this.sortName("nameAZ")} />
                       : <ButtonDown onClick={() => this.sortName("nameZA")} />
                     }
                     Название
-                  </th>
-                  <th scope="col">Полка</th>
-                  <th scope="col">
+                  </div>
+                  <div className="col-sm-2 col-4 font-weight-bold">Полка</div>
+                  <div className="col-sm-2 col-5 font-weight-bold">
                     {
                       this.state.sortYearUp
                       ? <ButtonUp onClick={() => this.sortYear("yearDown")} />
                       : <ButtonDown onClick={() => this.sortYear("yearUp")} />
                     }
                     Год
-                  </th>
-                  <th scope="col"> </th>
-                </tr>
-              </thead>
-              <tbody>
-
+                  </div>
+                  <div className="col-sm-2 col-2"> </div>
+                </div>
                 { this.renderRows() }
-
-              </tbody>
-            </table>
           </div>
           <Pagination
             currentPage={1}
