@@ -25,14 +25,8 @@ class BookDetail extends Component {
                 <div>
                   <h1 className="mb-5">{this.props.book.name[this.props.locale]}</h1>
                   <div className="row">
-                    <div className="col-4">
-                      <img
-                        src={this.props.book.image ? this.props.book.image : belka}
-                        alt={ getWordByLocale('bookCover', this.props.locale) }
-                      />
-                    </div>
-                    <div className="col-8">
-                      <ul className="list-group">
+                    <div className="col-12 col-sm-7">
+                      <ul className="list-group mb-4">
                         <li className="list-group-item">
                           <strong>{ getWordByLocale('author', this.props.locale) }</strong>
                           {this.props.book.author[this.props.locale]}
@@ -46,6 +40,13 @@ class BookDetail extends Component {
                           {bookPlace ? places[bookPlace].name[this.props.locale] : ""}
                         </li>
                       </ul>
+                    </div>
+                    <div className="col-12 col-sm-5 text-center">
+                      <img
+                        style={{maxWidth: '300px', width: '100%'}}
+                        src={this.props.book.image ? this.props.book.image : belka}
+                        alt={ getWordByLocale('bookCover', this.props.locale) }
+                      />
                     </div>
                   </div>
                 </div>
