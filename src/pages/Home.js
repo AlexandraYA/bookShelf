@@ -8,6 +8,8 @@ import { fetchBooks, setPageType } from '../store/actions/books'
 import belka from '../belka.jpg'
 import { Alert } from '../components/Alert'
 import pageTypes from '../data/pageTypes.json'
+import { resetFilterSettings } from '../store/actions/app'
+import { getWordByLocale } from '../locale'
 
 
 class Home extends Component {
@@ -61,10 +63,13 @@ class Home extends Component {
     return (
       <Layout withHeader={true}>
         <div>
-          <h1>Все книги здесь</h1>
-          { this.props.showAlert ? <Alert text="Ничего не найдено" className="danger" /> : null }
+          <h1 className="mb-5">{ getWordByLocale('titleHome', this.props.locale) }</h1>
+          { this.props.showAlert ? <Alert text={ getWordByLocale('searchedNothing', this.props.locale) } className="danger" /> : null }
 
-          <SettingsBlock />
+          <SettingsBlock
+            currentLocale={this.props.locale}
+            resetFilterSettings={this.props.resetFilterSettings}
+          />
 
           <div className="row">
             { this.props.books.length
@@ -78,6 +83,7 @@ class Home extends Component {
                     <Card
                       book={book}
                       image={bookImage}
+                      currentLocale={this.props.locale}
                     />
                   </div>
                 )
@@ -104,14 +110,16 @@ function mapStateToProps(state) {
     books: state.books.homeBooks,
     page: state.books.currentPage,
     pages: state.books.allPages,
-    showAlert: state.app.showAlert
+    showAlert: state.app.showAlert,
+    locale: state.app.locale
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     setPageType: type => dispatch(setPageType(type)),
-    fetchBooks: page => dispatch(fetchBooks(page))
+    fetchBooks: page => dispatch(fetchBooks(page)),
+    resetFilterSettings: () => dispatch(resetFilterSettings())
   }
 }
 

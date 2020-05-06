@@ -1,5 +1,6 @@
 import { CREATE_PLACE, DELETE_PLACE, SAVE_PLACE_CODE } from './actionTypes'
 import { showAlert, hideAlert, showModal } from './app'
+import { getWordByLocale } from '../../locale'
 
 
 export function createPlace(place) {
@@ -33,11 +34,13 @@ export function createPlace(place) {
 export function beforeDeletePlace(placeCode, placeName) {
   return (dispatch, getState) => {
     const stateBooks = getState().books.books
+    const currentLocale = getState().app.locale
     const books = stateBooks.filter(book => book.place === placeCode)
 
     if (books.length) {
       dispatch(showModal({
-        text: 'Нельзя удалить месторасположение, у которого есть книги.'
+        text: getWordByLocale('errDelPlace', currentLocale),
+        closeBtn: getWordByLocale('closeBtn', currentLocale)
       }))
     } else {
       dispatch({
@@ -45,10 +48,10 @@ export function beforeDeletePlace(placeCode, placeName) {
         placeCode
       })
       dispatch(showModal({
-        title: 'Удаление месторасположения ' + placeName,
-        text: 'Вы уверены?',
-        actionBtn: 'Удалить',
-        closeBtn: 'Отмена'
+        title: getWordByLocale('placeDelTitle', currentLocale) + placeName,
+        text: getWordByLocale('delPlacePrompt', currentLocale),
+        actionBtn: getWordByLocale('deleteBtn', currentLocale),
+        closeBtn: getWordByLocale('cancelBtn', currentLocale)
       }))
     }
   }

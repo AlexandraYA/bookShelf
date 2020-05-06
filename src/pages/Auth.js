@@ -1,55 +1,61 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import is from 'is_js';
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import Layout from '../components/Layout'
+import { getWordByLocale } from '../locale'
 
-
-const settings = {
-  pages: {
-    login: {
-      btnText: 'Войти'
-    },
-    register: {
-      btnText: 'Зарегистрироваться'
-    }
-  }
-}
 
 class Auth extends Component {
 
-  state = {
-    isFormValid: false,
-    formControls: {
-      email: {
-        value: '',
-        type: 'email',
-        label: 'Email',
-        labelClass: "sr-only",
-        errorMessage: 'Введите корректный email',
-        valid: false,
-        touched: false,
-        validation: {
-          required: true,
-          email: true
-        }
-      },
-      password: {
-        value: '',
-        type: 'password',
-        label: 'Пароль',
-        labelClass: "sr-only",
-        errorMessage: 'Введите корректный пароль',
-        valid: false,
-        touched: false,
-        validation: {
-          required: true,
-          minLength: 6
+  constructor(props) {
+    super(props)
+
+    this.settings = {
+      pages: {
+        login: {
+          btnText: getWordByLocale('loginButton', this.props.locale)
+        },
+        register: {
+          btnText: getWordByLocale('registerButton', this.props.locale)
         }
       }
-    },
-    regim: 'login'
+    }
+
+    this.state = {
+      isFormValid: false,
+      formControls: {
+        email: {
+          value: '',
+          type: 'email',
+          label: 'Email',
+          labelClass: "sr-only",
+          errorMessage: getWordByLocale('errorEmail', this.props.locale),
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            email: true
+          }
+        },
+        password: {
+          value: '',
+          type: 'password',
+          label: getWordByLocale('password', this.props.locale),
+          labelClass: "sr-only",
+          errorMessage: getWordByLocale('errorPwd', this.props.locale),
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            minLength: 6
+          }
+        }
+      },
+      regim: 'login'
+    }
   }
 
   onFormSubmit(event) {
@@ -64,19 +70,21 @@ class Auth extends Component {
   }
 
   loginHandler = () => {
-    this.props.auth(
+    console.log("login")
+    /* this.props.auth(
       this.state.formControls.email.value,
       this.state.formControls.password.value,
       true
-    )
+    ) */
   };
 
   registerHandler = () => {
-    this.props.auth(
+    console.log("registration")
+    /* this.props.auth(
       this.state.formControls.email.value,
       this.state.formControls.password.value,
       false
-    )
+    ) */
   };
 
   validateControl(value, validation) {
@@ -149,7 +157,7 @@ class Auth extends Component {
         <div className="row justify-content-center">
           <div className="col-sm-12 col-md-10 col-lg-4">
             <div className="shadow-sm bg-white rounded p-5">
-              <h3 className="text-center mb-4">Домашняя библиотека</h3>
+              <h3 className="text-center mb-4">{ getWordByLocale('titleAuth', this.props.locale) }</h3>
               <form onSubmit={this.onFormSubmit} className="mb-4">
 
                 { this.renderInputs() }
@@ -157,14 +165,19 @@ class Auth extends Component {
                 <Link to={"/"} >
                   <Button
                     className='btn btn-primary btn-lg btn-block'
-                    onClick={this.login}
+                    onClick={this.loginHandler}
                     disabled={!this.state.isFormValid}>
-                    { settings.pages[this.state.regim].btnText }
+                    { this.settings.pages[this.state.regim].btnText }
                   </Button>
                 </Link>
               </form>
               <div className="text-center">
-                <a href="/" onClick={this.toggleRegim}>{ this.state.regim === 'login' ? 'Зарегистрироваться' : 'Войти' }</a>
+                <a href="/" onClick={this.toggleRegim}>
+                  { this.state.regim === 'login'
+                    ? getWordByLocale('registerButton', this.props.locale)
+                    : getWordByLocale('loginButton', this.props.locale)
+                  }
+                </a>
               </div>
             </div>
           </div>
@@ -174,4 +187,10 @@ class Auth extends Component {
   }
 }
 
-export default Auth
+function mapStateToProps(state) {
+  return {
+    locale: state.app.locale
+  }
+}
+
+export default connect(mapStateToProps)(Auth)

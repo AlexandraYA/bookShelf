@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import places from '../data/places.json'
+import { getWordByLocale } from '../locale'
 
 
 export const Card = props => (
@@ -8,11 +9,17 @@ export const Card = props => (
     <div className="row no-gutters">
       <div className="col-md-8">
         <div className="card-body">
-          <h5 className="card-title">{props.book.name.rus}</h5>
-          <p className="card-text">{props.book.author.rus}</p>
-          <p className="card-text"><small className="text-muted">Год издания книги: {props.book.year}</small></p>
-          <p className="card-text">Местоположение книги: {places[props.book.place].name.rus}</p>
-          <Link to={"/books/" + props.book.id} >Подробнее</Link>
+          <h5 className="card-title">{props.book.name[props.currentLocale]}</h5>
+          <p className="card-text">{props.book.author[props.currentLocale]}</p>
+          <p className="card-text"><small className="text-muted">
+            { getWordByLocale('yearBookPublic', props.currentLocale) }
+            {props.book.year}</small></p>
+          <p className="card-text">
+            { getWordByLocale('bookPlace', props.currentLocale) }
+            {places[props.book.place].name[props.currentLocale]}</p>
+          <Link to={"/books/" + props.book.id} >
+            { getWordByLocale('more', props.currentLocale) }
+          </Link>
         </div>
       </div>
       <div className="col-md-4">

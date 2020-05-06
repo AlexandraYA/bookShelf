@@ -7,64 +7,86 @@ import Button from '../components/UI/Button'
 import Select from '../components/UI/Select'
 import { saveBook } from '../store/actions/books'
 import { Alert } from '../components/Alert'
+import { getWordByLocale } from '../locale'
 
-
-function createTextInputControl(label, value) {
-  return createControl({
-    value: value,
-    label: label,
-    valid: true,
-    labelClass: "sr-only",
-    errorMessage: "Поле не может быть пустым"
-  }, {required: true});
-};
-
-function createFormControls(initialBook) {
-
-  let rusAuthor = '';
-  let engAuthor = '';
-  let rusName = '';
-  let engName = '';
-  let year = '';
-
-  if (initialBook) {
-    rusAuthor = initialBook.author.rus;
-    engAuthor = initialBook.author.eng;
-    rusName = initialBook.name.rus;
-    engName = initialBook.name.eng;
-    year = initialBook.year;
-  }
-
-  return {
-    rusAuthor: createTextInputControl("Автор (по-русски)", rusAuthor),
-    engAuthor: createTextInputControl("Автор (по-английски)", engAuthor),
-    rusName: createTextInputControl("Название (по-русски)", rusName),
-    engName: createTextInputControl("Название (по-английски)", engName),
-    year: createTextInputControl("Год издания", year)
-  };
-};
 
 class EditBook extends Component {
 
-  state = {
-    isFormValid: true,
-    formControls: createFormControls(),
-    image: {},
-    placeCode: ''
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      locale: this.props.locale,
+      isFormValid: true,
+      formControls: this.createFormControls(),
+      image: {},
+      placeCode: ''
+    }
   }
 
   componentDidMount() {
     this.setState({
-      formControls: createFormControls(this.props.book),
+      formControls: this.createFormControls(this.props.book),
       image: createControl({
         value: this.props.book.image,
-        label: "Фотография обложки",
+        label: getWordByLocale('bookPhoto', this.props.locale),
         type: "file",
-        errorMessage: "Загрузите фотографию обложки"
+        errorMessage: getWordByLocale('errBookCover', this.props.locale)
       }, {required: true}),
       placeCode: this.props.book.place
     })
   }
+
+  componentDidUpdate() {
+    if (this.state.locale !== this.props.locale) {
+      this.setState({
+        locale: this.props.locale,
+        formControls: this.createFormControls(this.props.book),
+        image: createControl({
+          value: this.props.book.image,
+          label: getWordByLocale('bookPhoto', this.props.locale),
+          type: 'file',
+          errorMessage: getWordByLocale('errBookCover', this.props.locale)
+        }, {required: true}),
+        placeCode: this.props.book.place
+      })
+    }
+  }
+
+  createTextInputControl = (label, value) => {
+    return createControl({
+      value: value,
+      label: label,
+      valid: true,
+      labelClass: "sr-only",
+      errorMessage: getWordByLocale('errBookCover', this.props.locale)
+    }, {required: true});
+  };
+
+  createFormControls = (initialBook) => {
+
+    let rusAuthor = '';
+    let engAuthor = '';
+    let rusName = '';
+    let engName = '';
+    let year = '';
+
+    if (initialBook) {
+      rusAuthor = initialBook.author.rus;
+      engAuthor = initialBook.author.eng;
+      rusName = initialBook.name.rus;
+      engName = initialBook.name.eng;
+      year = initialBook.year;
+    }
+
+    return {
+      rusAuthor: this.createTextInputControl(getWordByLocale('rusAuthor', this.props.locale), rusAuthor),
+      engAuthor: this.createTextInputControl(getWordByLocale('engAuthor', this.props.locale), engAuthor),
+      rusName: this.createTextInputControl(getWordByLocale('rusName', this.props.locale), rusName),
+      engName: this.createTextInputControl(getWordByLocale('engName', this.props.locale), engName),
+      year: this.createTextInputControl(getWordByLocale('yearTitle', this.props.locale), year)
+    };
+  };
 
   onSubmitHandler = event => {
     event.preventDefault()
@@ -94,11 +116,11 @@ class EditBook extends Component {
 
     this.setState({
       isFormValid: false,
-      formControls: createFormControls(),
+      formControls: this.createFormControls(),
       image: createControl({
-        label: "Фотография обложки",
-        type: "file",
-        errorMessage: "Загрузите фотографию обложки"
+        label: getWordByLocale('bookPhoto', this.props.locale),
+        type: 'file',
+        errorMessage: getWordByLocale('errBookCover', this.props.locale)
       }, {required: true}),
       placeCode: Object.keys(this.props.places)[0]
     });
@@ -161,12 +183,12 @@ class EditBook extends Component {
 
   render() {
     const select = <Select
-          label="Месторасположение"
+          label={getWordByLocale('bookPlaceTitle', this.props.locale)}
           value={this.state.placeCode}
           onChange={event => this.selectChangeHandler(event.target.value)}
           options={Object.values(this.props.places).map(place => {
                     return {
-                      text: place.name.rus,
+                      text: place.name[this.props.locale],
                       value: place.code
                     }
                   })}
@@ -174,10 +196,10 @@ class EditBook extends Component {
 
     return (
       <Layout withHeader={true}>
-        { this.props.showAlert ? <Alert text={"Книга успешно изменена."} className="success" /> : null }
+        { this.props.showAlert ? <Alert text={getWordByLocale('bookUpdated', this.props.locale)} className="success" /> : null }
         <div>
-          <div className="mb-4">
-            <h2 className="text-center">Редактировать книгу</h2>
+          <div className="mb-5">
+            <h2 className="text-center">{ getWordByLocale('titleEditBook', this.props.locale) }</h2>
           </div>
           <div className="row justify-content-center">
             <div className="col-sm-12 col-md-10 col-lg-5">
@@ -211,7 +233,7 @@ class EditBook extends Component {
                     disabled={!this.state.isFormValid}
                     className="btn btn-success btn-lg btn-block"
                   >
-                    Сохранить
+                    { getWordByLocale('saveBtn', this.props.locale) }
                   </Button>
                 </form>
               </div>
@@ -227,7 +249,8 @@ function mapStateToProps(state) {
   return {
     book: state.books.book,
     showAlert: state.app.showAlert,
-    places: state.places.places
+    places: state.places.places,
+    locale: state.app.locale
   }
 }
 

@@ -5,6 +5,7 @@ import belka from '../belka.jpg'
 import { getBookById } from '../store/actions/books'
 import Loader from '../components/UI/Loader/Loader'
 import places from '../data/places.json'
+import { getWordByLocale } from '../locale'
 
 
 class BookDetail extends Component {
@@ -22,21 +23,27 @@ class BookDetail extends Component {
             this.props.book
               ? (
                 <div>
-                  <h1>{this.props.book.name.rus}</h1>
+                  <h1 className="mb-5">{this.props.book.name[this.props.locale]}</h1>
                   <div className="row">
                     <div className="col-4">
-                      <img src={this.props.book.image ? this.props.book.image : belka} alt="Обложка книги" />
+                      <img
+                        src={this.props.book.image ? this.props.book.image : belka}
+                        alt={ getWordByLocale('bookCover', this.props.locale) }
+                      />
                     </div>
                     <div className="col-8">
                       <ul className="list-group">
                         <li className="list-group-item">
-                          <strong>Автор:</strong> {this.props.book.author.rus}
+                          <strong>{ getWordByLocale('author', this.props.locale) }</strong>
+                          {this.props.book.author[this.props.locale]}
                         </li>
                         <li className="list-group-item">
-                          <strong>Год:</strong> {this.props.book.year}
+                          <strong>{ getWordByLocale('yearBookPublic', this.props.locale) }</strong>
+                          {this.props.book.year}
                         </li>
                         <li className="list-group-item">
-                          <strong>Месторасположение:</strong> {bookPlace ? places[bookPlace].name.rus : ""}
+                          <strong>{ getWordByLocale('bookPlace', this.props.locale) }</strong>
+                          {bookPlace ? places[bookPlace].name[this.props.locale] : ""}
                         </li>
                       </ul>
                     </div>
@@ -53,7 +60,8 @@ class BookDetail extends Component {
 
 function mapStateToProps(state) {
   return {
-    book: state.books.book
+    book: state.books.book,
+    locale: state.app.locale
   }
 }
 

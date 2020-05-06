@@ -7,41 +7,25 @@ import Select from '../components/UI/Select'
 import Button from '../components/UI/Button'
 import { addBookToLibrary } from '../store/actions/books'
 import { Alert } from '../components/Alert'
+import { getWordByLocale } from '../locale'
 
-
-function createTextInputControl(label) {
-  return createControl({
-    label: label,
-    labelClass: "sr-only",
-    errorMessage: "Поле не может быть пустым"
-  }, {required: true});
-};
-
-function createFormControls() {
-  return {
-    rusAuthor: createTextInputControl("Автор (по-русски)"),
-    engAuthor: createTextInputControl("Автор (по-английски)"),
-    rusName: createTextInputControl("Название (по-русски)"),
-    engName: createTextInputControl("Название (по-английски)"),
-    year: createTextInputControl("Год издания")
-  };
-};
 
 class CreateBook extends Component {
 
-  state = {
-    isFormValid: false,
-    formControls: createFormControls(),
-    image: createControl({
-      label: "Фотография обложки",
-      type: "file",
-      errorMessage: "Загрузите фотографию обложки"
-    }, {required: true}),
-    placeCode: ''
-  }
-
   constructor(props) {
     super(props)
+
+    this.state = {
+      locale: this.props.locale,
+      isFormValid: false,
+      formControls: this.createFormControls(),
+      image: createControl({
+        label: getWordByLocale('bookPhoto', this.props.locale),
+        type: 'file',
+        errorMessage: getWordByLocale('errBookCover', this.props.locale)
+      }, {required: true}),
+      placeCode: ''
+    }
 
     this.uploadFileHandler.bind(this)
   }
@@ -51,6 +35,40 @@ class CreateBook extends Component {
       placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''
     })
   }
+
+  componentDidUpdate() {
+    if (this.state.locale !== this.props.locale) {
+      this.setState({
+        locale: this.props.locale,
+        isFormValid: false,
+        formControls: this.createFormControls(),
+        image: createControl({
+          label: getWordByLocale('bookPhoto', this.props.locale),
+          type: 'file',
+          errorMessage: getWordByLocale('errBookCover', this.props.locale)
+        }, {required: true}),
+        placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''
+      })
+    }
+  }
+
+  createTextInputControl = (label) => {
+    return createControl({
+      label: label,
+      labelClass: "sr-only",
+      errorMessage: getWordByLocale('errNotEmpty', this.props.locale)
+    }, {required: true});
+  };
+
+  createFormControls = () => {
+    return {
+      rusAuthor: this.createTextInputControl(getWordByLocale('rusAuthor', this.props.locale)),
+      engAuthor: this.createTextInputControl(getWordByLocale('engAuthor', this.props.locale)),
+      rusName: this.createTextInputControl(getWordByLocale('rusName', this.props.locale)),
+      engName: this.createTextInputControl(getWordByLocale('engName', this.props.locale)),
+      year: this.createTextInputControl(getWordByLocale('yearTitle', this.props.locale))
+    };
+  };
 
   onSubmitHandler = event => {
     event.preventDefault()
@@ -79,11 +97,11 @@ class CreateBook extends Component {
 
     this.setState({
       isFormValid: false,
-      formControls: createFormControls(),
+      formControls: this.createFormControls(),
       image: createControl({
-        label: "Фотография обложки",
+        label: getWordByLocale('bookCover', this.props.locale),
         type: "file",
-        errorMessage: "Загрузите фотографию обложки"
+        errorMessage: getWordByLocale('errBookCover', this.props.locale)
       }, {required: true}),
       placeCode: Object.keys(this.props.places)[0]
     });
@@ -146,12 +164,12 @@ class CreateBook extends Component {
 
   render() {
     const select = <Select
-          label="Месторасположение"
+          label={getWordByLocale('bookPlaceTitle', this.props.locale)}
           value={this.state.placeCode}
           onChange={event => this.selectChangeHandler(event.target.value)}
           options={Object.values(this.props.places).map(place => {
                     return {
-                      text: place.name.rus,
+                      text: place.name[this.props.locale],
                       value: place.code
                     }
                   })}
@@ -159,10 +177,10 @@ class CreateBook extends Component {
 
     return (
       <Layout withHeader={true}>
-        { this.props.showAlert ? <Alert text={"Книга успешно создана."} className="success" /> : null }
+        { this.props.showAlert ? <Alert text={getWordByLocale('bookCreated', this.props.locale)} className="success" /> : null }
         <div>
-          <div className="mb-4">
-            <h2 className="text-center">Добавить книгу</h2>
+          <div className="mb-5">
+            <h2 className="text-center">{ getWordByLocale('titleCreateBook', this.props.locale) }</h2>
           </div>
           <div className="row justify-content-center">
             <div className="col-sm-12 col-md-10 col-lg-5">
@@ -196,7 +214,7 @@ class CreateBook extends Component {
                     disabled={!this.state.isFormValid}
                     className="btn btn-success btn-lg btn-block"
                   >
-                    Сохранить
+                    { getWordByLocale('saveBtn', this.props.locale) }
                   </Button>
                 </form>
               </div>
@@ -211,7 +229,8 @@ class CreateBook extends Component {
 function mapStateToProps(state) {
   return {
     showAlert: state.app.showAlert,
-    places: state.places.places
+    places: state.places.places,
+    locale: state.app.locale
   }
 }
 

@@ -7,41 +7,68 @@ import Button from '../components/UI/Button'
 import { Alert } from '../components/Alert'
 import { IconTrash } from '../components/UI/icons'
 import { createPlace, deletePlace, beforeDeletePlace } from '../store/actions/places'
+import { getWordByLocale } from '../locale'
 
-
-function createTextInputControl(label) {
-  return createControl({
-    label: label,
-    labelClass: "sr-only",
-    errorMessage: "Минимальная длина 3 символа"
-  }, {required: true, minLength: 3});
-};
-
-function createFormControls() {
-  return {
-    rusName: createTextInputControl("Название на русском"),
-    engName: createTextInputControl("Название на английском"),
-    code: createTextInputControl("Код")
-  };
-};
 
 class ManagePlaces extends Component {
 
-  state = {
-    formControls: createFormControls(),
-    isFormValid: false,
-    regim: "create",
-    alert: {
-      create: {
-        text: "Месторасположение успешно создано.",
-        class: "success"
-      },
-      delete: {
-        text: "Месторасположение успешно удалено.",
-        class: "danger"
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      locale: this.props.locale,
+      formControls: this.createFormControls(),
+      isFormValid: false,
+      regim: "create",
+      alert: {
+        create: {
+          text: getWordByLocale('placeCreated', this.props.locale),
+          class: "success"
+        },
+        delete: {
+          text: getWordByLocale('placeDeleted', this.props.locale),
+          class: "danger"
+        }
       }
     }
   }
+
+  componentDidUpdate() {
+    if (this.state.locale !== this.props.locale) {
+      this.setState({
+        locale: this.props.locale,
+        formControls: this.createFormControls(),
+        isFormValid: false,
+        regim: "create",
+        alert: {
+          create: {
+            text: getWordByLocale('placeCreated', this.props.locale),
+            class: "success"
+          },
+          delete: {
+            text: getWordByLocale('placeDeleted', this.props.locale),
+            class: "danger"
+          }
+        }
+      })
+    }
+  }
+
+  createTextInputControl = (label) => {
+    return createControl({
+      label: label,
+      labelClass: "sr-only",
+      errorMessage: getWordByLocale('errMinLeng3', this.props.locale)
+    }, {required: true, minLength: 3});
+  };
+
+  createFormControls = () => {
+    return {
+      rusName: this.createTextInputControl(getWordByLocale('rusName', this.props.locale)),
+      engName: this.createTextInputControl(getWordByLocale('engName', this.props.locale)),
+      code: this.createTextInputControl(getWordByLocale('placeCode', this.props.locale))
+    };
+  };
 
   onSubmitHandler = event => {
     event.preventDefault()
@@ -63,12 +90,11 @@ class ManagePlaces extends Component {
     })
   }
 
-  deletePlaceHandler = () => {
-    this.props.deletePlace()
-  }
-
   openDeleteModal = (placeCode, placeName) => {
     this.props.beforeDeletePlace(placeCode, placeName)
+    this.setState({
+      regim: 'delete'
+    })
   }
 
   createPlaceHandler = event => {
@@ -86,7 +112,7 @@ class ManagePlaces extends Component {
 
     this.setState({
       regim: 'create',
-      formControls: createFormControls(),
+      formControls: this.createFormControls(),
       isFormValid: false
     })
   }
@@ -119,15 +145,15 @@ class ManagePlaces extends Component {
       <Layout withHeader={true}>
         { this.props.showAlert ? <Alert text={alert[regim].text} className={alert[regim].class} /> : null }
         <div>
-          <h1 className="mb-5 text-break">Управление месторасположениями</h1>
+          <h1 className="mb-5 text-break">{ getWordByLocale('titleManagePlaces', this.props.locale) }</h1>
           <div className="row justify-content-center mb-4">
             <div className="col-md-6">
               <ul className="list-group mb-5">
                 { Object.values(this.props.places).map(place => (
                   <li key={place.code} className="list-group-item d-flex justify-content-between">
-                    <span>{place.name.rus}</span>
+                    <span>{place.name[this.props.locale]}</span>
                     <Button
-                      onClick={() => this.openDeleteModal(place.code, place.name.rus)}
+                      onClick={() => this.openDeleteModal(place.code, place.name[this.props.locale])}
                       disabled={false}
                       className="btn btn-danger btn-sm"
                     >
@@ -147,8 +173,8 @@ class ManagePlaces extends Component {
                     disabled={!this.state.isFormValid}
                     className="btn btn-success btn-lg btn-block"
                   >
-                    Сохранить
-                  </Button>
+                    { getWordByLocale('saveBtn', this.props.locale) }
+                </Button>
               </form>
             </div>
           </div>
@@ -161,7 +187,8 @@ class ManagePlaces extends Component {
 function mapStateToProps(state) {
   return {
     places: state.places.places,
-    showAlert: state.app.showAlert
+    showAlert: state.app.showAlert,
+    locale: state.app.locale
   }
 }
 
@@ -169,7 +196,7 @@ function mapDispatchToProps(dispatch) {
   return {
     createPlace: place => dispatch(createPlace(place)),
     deletePlace: placeId => dispatch(deletePlace(placeId)),
-    beforeDeletePlace: placeId => dispatch(beforeDeletePlace(placeId))
+    beforeDeletePlace: (placeId, placeName) => dispatch(beforeDeletePlace(placeId, placeName))
   }
 }
 

@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
-import { connect } from 'react-redux'
 import classes from './SettingsBlock.module.css'
 import Button from '../UI/Button'
 import Search from '../Search'
 import Filter from '../Filter'
 import Sort from '../Sort'
-import { resetFilterSettings } from '../../store/actions/app'
+import { getWordByLocale } from '../../locale'
 
 
 class SettingsBlock extends Component {
@@ -30,14 +29,14 @@ class SettingsBlock extends Component {
               disabled={false}
               onClick={this.toggleFilters}
             >
-              Фильтры, поиск, сортировка
+              { getWordByLocale('toggleFilters', this.props.currentLocale) }
             </Button>
             <Button
               className="btn btn-danger"
               disabled={false}
               onClick={this.props.resetFilterSettings}
             >
-              Сбросить
+              { getWordByLocale('resetButton', this.props.currentLocale) }
             </Button>
           </div>
           <div className={this.state.open ? classes.settingsBlock + " " + classes.open : classes.settingsBlock + " " + classes.close}>
@@ -65,10 +64,4 @@ class SettingsBlock extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    resetFilterSettings: () => dispatch(resetFilterSettings())
-  }
-}
-
-export default connect(null, mapDispatchToProps)(SettingsBlock)
+export default SettingsBlock

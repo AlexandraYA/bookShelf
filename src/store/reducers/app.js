@@ -1,4 +1,5 @@
 import {
+  CHANGE_LOCALE,
   SHOW_LOADER,
   HIDE_LOADER,
   SHOW_ALERT,
@@ -21,6 +22,7 @@ const defaultFilterSettings = {
 }
 
 const initialState = {
+  locale: 'rus',
   loading: false,
   showAlert: false,
   showModal: false,
@@ -37,6 +39,11 @@ const initialState = {
 export default function appReducer(state = initialState, action) {
 
   switch (action.type) {
+    case CHANGE_LOCALE:
+      return {
+        ...state,
+        locale: action.newLocale
+      }
     case SHOW_LOADER:
       return {
         ...state,

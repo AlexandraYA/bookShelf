@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import InlineForm from './InlineForm'
 import { search } from '../store/actions/books'
 import { saveSearchValue, saveSearchFieldValue } from '../store/actions/app'
+import { getWordByLocale } from '../locale'
 
 
 class Search extends Component {
@@ -20,24 +21,24 @@ class Search extends Component {
         btn={{
           class: "btn-outline-info",
           disabled: false,
-          text: "Найти",
+          text: getWordByLocale('searchButton', this.props.currentLocale),
           onClick: this.startSearching
         }}
         select={{
           defaultValue: this.props.field,
           onChange: event => this.props.changeSearchFieldValue(event.target.value),
           options: [{
-            text: "по автору",
+            text: getWordByLocale('searchAuthor', this.props.currentLocale),
             value: "author"
           },{
-            text: "по названию книги",
+            text: getWordByLocale('searchName', this.props.currentLocale),
             value: "name"
           }]
         }}
         input={{
           onChange: event => this.props.changeSearchValue(event.target.value),
           value: this.props.value,
-          placeholder: "Введите слово..."
+          placeholder: getWordByLocale('searchDefault', this.props.currentLocale)
         }}
       />
     )
@@ -47,7 +48,8 @@ class Search extends Component {
 function mapStateToProps(state) {
   return {
     field: state.app.filterSettings.searchField,
-    value: state.app.filterSettings.search
+    value: state.app.filterSettings.search,
+    currentLocale: state.app.locale
   }
 }
 

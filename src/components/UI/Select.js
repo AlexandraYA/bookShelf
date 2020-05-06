@@ -15,7 +15,7 @@ const Select = props => {
 
       <select
         id={htmlFor}
-        className='form-control'
+        className='form-control form-control-lg'
         value={props.value}
         onChange={props.onChange}
       >

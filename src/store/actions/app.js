@@ -1,4 +1,5 @@
 import {
+  CHANGE_LOCALE,
   SHOW_LOADER,
   HIDE_LOADER,
   SHOW_ALERT,
@@ -13,6 +14,7 @@ import {
 } from './actionTypes'
 import { deletePlace } from './places'
 import { fetchBooks, deleteBook } from './books'
+import locales from '../../data/locales.json'
 
 
 export function showLoader() {
@@ -96,5 +98,21 @@ export function saveSearchFieldValue(value) {
   return {
     type: SAVE_SEARCH_FIELD_VALUE,
     value
+  }
+}
+
+export function changeLocale() {
+  return (dispatch, getState) => {
+    const state = getState().app
+    let newLocale = locales.RUS
+
+    if (state.locale === locales.RUS) {
+      newLocale = locales.ENG
+    }
+
+    return dispatch({
+      type: CHANGE_LOCALE,
+      newLocale
+    })
   }
 }

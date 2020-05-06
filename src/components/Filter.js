@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { filter } from '../store/actions/books'
 import { saveFilterValue } from '../store/actions/app'
+import { getWordByLocale } from '../locale'
 import InlineForm from './InlineForm'
 
 
@@ -16,7 +17,7 @@ class Filter extends Component {
     let placesToOptions = Object.values(this.props.places).map(value => {
       return {
         value: value.code,
-        text: value.name.rus
+        text: value.name[this.props.currentLocale]
       }
     })
 
@@ -26,11 +27,11 @@ class Filter extends Component {
         btn={{
           class: "btn-outline-secondary",
           disabled: false,
-          text: "Отфильтровать",
+          text: getWordByLocale('filterButton', this.props.currentLocale),
           onClick: this.startFiltering
         }}
         select={{
-          selectLabel: "Выберите полку",
+          selectLabel: getWordByLocale('filterDefault', this.props.currentLocale),
           defaultValue: this.props.place,
           onChange: event => this.props.changeFilterValue(event.target.value),
           options: placesToOptions
@@ -43,7 +44,8 @@ class Filter extends Component {
 function mapStateToProps(state) {
   return {
     places: state.places.places,
-    place: state.app.filterSettings.filter
+    place: state.app.filterSettings.filter,
+    currentLocale: state.app.locale
   }
 }
 

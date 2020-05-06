@@ -17,6 +17,7 @@ import {
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
 import places from '../data/places.json'
 import pageTypes from '../data/pageTypes.json'
+import { getWordByLocale } from '../locale'
 
 
 class ManageBooks extends Component {
@@ -57,14 +58,14 @@ class ManageBooks extends Component {
     })
   }
 
-  renderRows() {
+  renderRows = () => {
     return this.props.books.map(book => {
       return (
         <div className="row pt-2 border-bottom" key={book.id}>
           <div className="col-sm-1 col-1 pb-2 pb-sm-0">{book.id}</div>
-          <div className="col-sm-2 col-5 pb-2 pb-sm-0">{book.author.rus}</div>
-          <div className="col-sm-3 col-5 pb-2 pb-sm-0">{book.name.rus}</div>
-          <div className="col-sm-2 col-5 pb-2 pb-sm-0">{places[book.place].name.rus}</div>
+          <div className="col-sm-2 col-5 pb-2 pb-sm-0">{book.author[this.props.locale]}</div>
+          <div className="col-sm-3 col-5 pb-2 pb-sm-0">{book.name[this.props.locale]}</div>
+          <div className="col-sm-2 col-5 pb-2 pb-sm-0">{places[book.place].name[this.props.locale]}</div>
           <div className="col-sm-2 col-3 pb-2 pb-sm-0">{book.year}</div>
           <div className="col-sm-2 col-4 pb-2 pb-sm-0">
             <button
@@ -76,7 +77,7 @@ class ManageBooks extends Component {
             </button>
             <button
               type="button"
-              onClick={() => this.props.deleteBookHandle(book.id, book.name.rus)}
+              onClick={() => this.props.deleteBookHandle(book.id, book.name[this.props.locale])}
               className="btn btn-danger btn-sm mb-1"
             >
               <IconTrash />
@@ -91,8 +92,8 @@ class ManageBooks extends Component {
     return (
       <Layout withHeader={true}>
         <div>
-          <h1>Управление Библиотекой</h1>
-          { this.props.showAlert ? <Alert text="Ничего не найдено" className="danger" /> : null }
+          <h1 className="mb-5">{ getWordByLocale('titleManageBooks', this.props.locale) }</h1>
+          { this.props.showAlert ? <Alert text={ getWordByLocale('searchedNothing', this.props.locale) } className="danger" /> : null }
           <div className="row mt-4">
             <div className="col-auto mb-3">
               <form className="form-inline" onSubmit={this.onSubmitHandler}>
@@ -101,13 +102,15 @@ class ManageBooks extends Component {
                   className="custom-select"
                   value={this.props.defaultFilter}
                   onChange={event => this.props.changeFilterValue(event.target.value)}>
-                    <option value="">Выберите полку</option>
+                    <option value="">{ getWordByLocale('filterDefault', this.props.locale) }</option>
                     {
                       Object.values(this.props.places).length
                       ? Object.values(this.props.places).map(place => (
-                        <option key={place.name.rus + place.id} value={place.code}>{place.name.rus}</option>
+                        <option key={place.name.eng + place.id} value={place.code}>{place.name[this.props.locale]}</option>
                       ))
-                      : <option disabled>Нет полок</option>
+                      : <option disabled>
+                        { getWordByLocale('filterNoFields', this.props.locale) }
+                      </option>
                     }
                   </select>
                 </div>
@@ -116,7 +119,7 @@ class ManageBooks extends Component {
                   onClick={() => {this.props.filter()}}
                   className="btn btn-outline-info mb-2"
                 >
-                  Отфильтровать
+                  { getWordByLocale('filterButton', this.props.locale) }
                 </button>
               </form>
             </div>
@@ -126,7 +129,7 @@ class ManageBooks extends Component {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Что будем искать?"
+                    placeholder={ getWordByLocale('searchDefault2', this.props.locale) }
                     value={this.props.search}
                     onChange={event => this.props.changeSearchValue(event.target.value)}
                   />
@@ -136,12 +139,14 @@ class ManageBooks extends Component {
                   onClick={event => {this.props.searchIntoAllFields(event.target.value)}}
                   className="btn btn-outline-primary mb-2"
                 >
-                  Найти
+                  { getWordByLocale('searchButton', this.props.locale) }
                 </button>
               </form>
             </div>
             <div className="col-auto">
-              <button type="submit" onClick={() => {this.props.reset()}} className="btn btn-outline-danger">Сбросить</button>
+              <button type="submit" onClick={() => {this.props.reset()}} className="btn btn-outline-danger">
+                { getWordByLocale('resetButton', this.props.locale) }
+              </button>
             </div>
           </div>
           <div className="justify-content-center my-4">
@@ -153,7 +158,7 @@ class ManageBooks extends Component {
                       ? <ButtonUp onClick={() => this.sortAuthor("authorAZ")} />
                       : <ButtonDown onClick={() => this.sortAuthor("authorZA")} />
                     }
-                    Автор
+                    { getWordByLocale('authorTitle', this.props.locale) }
                   </div>
                   <div className="col-sm-3 col-6 pr-0 font-weight-bold">
                     {
@@ -161,7 +166,7 @@ class ManageBooks extends Component {
                       ? <ButtonUp onClick={() => this.sortName("nameAZ")} />
                       : <ButtonDown onClick={() => this.sortName("nameZA")} />
                     }
-                    Название
+                    { getWordByLocale('nameTitle', this.props.locale) }
                   </div>
                   <div className="col-sm-2 col-4 font-weight-bold">Полка</div>
                   <div className="col-sm-2 col-5 font-weight-bold">
@@ -170,7 +175,7 @@ class ManageBooks extends Component {
                       ? <ButtonUp onClick={() => this.sortYear("yearDown")} />
                       : <ButtonDown onClick={() => this.sortYear("yearUp")} />
                     }
-                    Год
+                    { getWordByLocale('yearTitle', this.props.locale) }
                   </div>
                   <div className="col-sm-2 col-2"> </div>
                 </div>
@@ -192,7 +197,8 @@ function mapStateToProps(state) {
     places: state.places.places,
     defaultFilter: state.app.filterSettings.filter,
     showAlert: state.app.showAlert,
-    search: state.app.filterSettings.search
+    search: state.app.filterSettings.search,
+    locale: state.app.locale
   }
 }
 
@@ -201,7 +207,7 @@ function mapDispatchToProps(dispatch) {
     setPageType: type => dispatch(setPageType(type)),
     fetchBooks: () => dispatch(fetchBooks()),
     editBookHandle: (bookId, history) => dispatch(toPageEditBook(bookId, history)),
-    deleteBookHandle: bookId => dispatch(beforeDeleteBook(bookId)),
+    deleteBookHandle: (bookId, bookName) => dispatch(beforeDeleteBook(bookId, bookName)),
     setSortTypeAndSort: sortType => dispatch(setSortTypeAndSort(sortType)),
     changeFilterValue: value => dispatch(saveFilterValue(value)),
     filter: () => dispatch(filter()),

@@ -12,6 +12,7 @@ import {
 import { showLoader, hideLoader, showAlert, hideAlert, showModal, saveSortValue } from './app'
 import sortTypes from '../../data/sortTypes.json'
 import pageTypes from '../../data/pageTypes.json'
+import { getWordByLocale } from '../../locale'
 
 
 export function fetchBooks(page = null) {
@@ -19,7 +20,7 @@ export function fetchBooks(page = null) {
     dispatch(showLoader())
 
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.locale)
     const currentPage = page || 1
     const homeBooks = page === 1 ? [] : state.books.homeBooks
 
@@ -42,15 +43,17 @@ export function toPageEditBook(bookId, history) {
 
 export function beforeDeleteBook(bookId, bookName) {
   return (dispatch, getState) => {
+    const currentLocale = getState().app.locale
+
     dispatch({
       type: SAVE_BOOK_ID,
       bookId
     })
     dispatch(showModal({
-      title: 'Удаление книги ' + bookName,
-      text: 'Вы уверены?',
-      actionBtn: 'Удалить',
-      closeBtn: 'Отмена',
+      title: getWordByLocale('bookDelTitle', currentLocale) + bookName,
+      text: getWordByLocale('delPlacePrompt', currentLocale),
+      actionBtn: getWordByLocale('deleteBtn', currentLocale),
+      closeBtn: getWordByLocale('cancelBtn', currentLocale),
       typeModal: 'deleteBook'
     }))
   }
@@ -125,7 +128,7 @@ export function getBookById(bookId) {
 export function searchIntoAllFields() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.locale)
     return dispatch(showBooksList(
       books,
       1,
@@ -137,9 +140,9 @@ export function searchIntoAllFields() {
   }
 }
 
-function doSearch(field, value, books) {
+function doSearch(field, value, books, locale) {
   return books.filter(book => {
-    if (book[field].rus.toLowerCase().includes(value.toLowerCase())) {
+    if (book[field][locale].toLowerCase().includes(value.toLowerCase())) {
       return book
     }
   })
@@ -148,7 +151,7 @@ function doSearch(field, value, books) {
 export function search() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.filterSettings.searchField)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.locale, state.app.filterSettings.searchField)
     return dispatch(showBooksList(
       books,
       1,
@@ -171,7 +174,7 @@ function doFilter(place, books) {
 export function filter() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.locale)
     return dispatch(showBooksList(
       books,
       1,
@@ -190,7 +193,7 @@ export function setSortTypeAndSort(sortType) {
   }
 }
 
-function doSort(sortType, books) {
+function doSort(sortType, books, locale) {
   let field = sortTypes.sortTypes[sortType].field
   let up = sortTypes.sortTypes[sortType].up
 
@@ -207,10 +210,10 @@ function doSort(sortType, books) {
     })
   } else {
     return books.sort(function (a, b) {
-      if (a[field].rus > b[field].rus) {
+      if (a[field][locale] > b[field][locale]) {
         return up ? 1 : -1
       }
-      if (a[field].rus < b[field].rus) {
+      if (a[field][locale] < b[field][locale]) {
         return up ? -1 : 1
       }
       // a должно быть равным b
@@ -222,7 +225,7 @@ function doSort(sortType, books) {
 export function sort() {
   return (dispatch, getState) => {
     const state = getState()
-    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch)
+    let books = getBooksTreated(state.app.filterSettings, state.books.books, dispatch, state.app.locale)
     return dispatch(showBooksList(
       books,
       1,
@@ -241,15 +244,15 @@ export function setPageType(pageType) {
   }
 }
 
-function getBooksTreated(filterSettings, stateBooks, dispatch, field = null) {
+function getBooksTreated(filterSettings, stateBooks, dispatch, locale = 'rus', field = null) {
   let books = []
 
   if (filterSettings.search.length) {
     if (field) {
-      books = doSearch(field, filterSettings.search, stateBooks)
+      books = doSearch(field, filterSettings.search, stateBooks, locale)
     } else {
-      books = doSearch('author', filterSettings.search, stateBooks)
-      let books2 = doSearch('name', filterSettings.search, stateBooks)
+      books = doSearch('author', filterSettings.search, stateBooks, locale)
+      let books2 = doSearch('name', filterSettings.search, stateBooks, locale)
       if (books2.length) {
         books = books.concat(books2)
       }
@@ -272,7 +275,7 @@ function getBooksTreated(filterSettings, stateBooks, dispatch, field = null) {
 
   if (filterSettings.sortType.length) {
     const startBooksArr = books.length ? books : stateBooks
-    books = doSort(filterSettings.sortType, [...startBooksArr])
+    books = doSort(filterSettings.sortType, [...startBooksArr], locale)
   }
 
   return books.length ? books : stateBooks
