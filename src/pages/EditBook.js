@@ -29,34 +29,31 @@ class EditBook extends Component {
     this.props.checkToken(this.props.history)
 
     if (this.props.isAuth) {
-      this.setState({
-        formControls: this.createFormControls(this.props.book),
-        image: createControl({
-          value: this.props.book.image,
-          label: getWordByLocale('bookPhoto', this.props.locale),
-          type: "file",
-          errorMessage: getWordByLocale('errBookCover', this.props.locale)
-        }, {required: true}),
-        placeCode: this.props.book.place
-      })
+      this.setState(this.getInitialState())
     }
   }
 
   componentDidUpdate() {
     if (this.state.locale !== this.props.locale) {
-      this.setState({
-        locale: this.props.locale,
-        formControls: this.createFormControls(this.props.book),
-        image: createControl({
-          value: this.props.book.image,
-          label: getWordByLocale('bookPhoto', this.props.locale),
-          type: 'file',
-          errorMessage: getWordByLocale('errBookCover', this.props.locale)
-        }, {required: true}),
-        placeCode: this.props.book.place
-      })
+      this.setState(
+        Object.assign(
+          {locale: this.props.locale},
+          this.getInitialState()
+        )
+      )
     }
   }
+
+  getInitialState = () => ({
+    formControls: this.createFormControls(this.props.book),
+    image: createControl({
+      value: this.props.book.image,
+      label: getWordByLocale('bookPhoto', this.props.locale),
+      type: 'file',
+      errorMessage: getWordByLocale('errBookCover', this.props.locale)
+    }, {required: true}),
+    placeCode: this.props.book.place
+  })
 
   createTextInputControl = (label, value) => {
     return createControl({

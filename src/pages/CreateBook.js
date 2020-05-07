@@ -16,17 +16,10 @@ class CreateBook extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      locale: this.props.locale,
-      isFormValid: false,
-      formControls: this.createFormControls(),
-      image: createControl({
-        label: getWordByLocale('bookPhoto', this.props.locale),
-        type: 'file',
-        errorMessage: getWordByLocale('errBookCover', this.props.locale)
-      }, {required: true}),
-      placeCode: ''
-    }
+    this.state = Object.assign(
+      this.getInitialState(),
+      {placeCode: ''}
+    )
 
     this.uploadFileHandler.bind(this)
   }
@@ -43,19 +36,25 @@ class CreateBook extends Component {
 
   componentDidUpdate() {
     if (this.state.locale !== this.props.locale) {
-      this.setState({
-        locale: this.props.locale,
-        isFormValid: false,
-        formControls: this.createFormControls(),
-        image: createControl({
-          label: getWordByLocale('bookPhoto', this.props.locale),
-          type: 'file',
-          errorMessage: getWordByLocale('errBookCover', this.props.locale)
-        }, {required: true}),
-        placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''
-      })
+      this.setState(
+        Object.assign(
+          {placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''},
+          this.getInitialState()
+        )
+      )
     }
   }
+
+  getInitialState = () => ({
+    locale: this.props.locale,
+    isFormValid: false,
+    formControls: this.createFormControls(),
+    image: createControl({
+      label: getWordByLocale('bookPhoto', this.props.locale),
+      type: 'file',
+      errorMessage: getWordByLocale('errBookCover', this.props.locale)
+    }, {required: true}),
+  })
 
   createTextInputControl = (label) => {
     return createControl({
