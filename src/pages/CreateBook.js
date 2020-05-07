@@ -6,6 +6,7 @@ import Input from '../components/UI/Input'
 import Select from '../components/UI/Select'
 import Button from '../components/UI/Button'
 import { addBookToLibrary } from '../store/actions/books'
+import { checkToken } from '../store/actions/auth'
 import { Alert } from '../components/Alert'
 import { getWordByLocale } from '../locale'
 
@@ -31,9 +32,13 @@ class CreateBook extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''
-    })
+    this.props.checkToken(this.props.history)
+
+    if (this.props.isAuth) {
+      this.setState({
+        placeCode: Object.keys(this.props.places).length ? Object.keys(this.props.places)[0] : ''
+      })
+    }
   }
 
   componentDidUpdate() {
@@ -176,7 +181,7 @@ class CreateBook extends Component {
         />
 
     return (
-      <Layout withHeader={true}>
+      <Layout withHeader={true} {...this.props}>
         { this.props.showAlert ? <Alert text={getWordByLocale('bookCreated', this.props.locale)} className="success" /> : null }
         <div>
           <div className="mb-5">
@@ -230,13 +235,15 @@ function mapStateToProps(state) {
   return {
     showAlert: state.app.showAlert,
     places: state.places.places,
-    locale: state.app.locale
+    locale: state.app.locale,
+    isAuth: state.auth.isAuth
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    createBook: (newBook, history) => dispatch(addBookToLibrary(newBook, history))
+    createBook: (newBook, history) => dispatch(addBookToLibrary(newBook, history)),
+    checkToken: history => dispatch(checkToken(history))
   }
 }
 

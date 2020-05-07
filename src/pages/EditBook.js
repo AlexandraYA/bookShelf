@@ -6,6 +6,7 @@ import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import Select from '../components/UI/Select'
 import { saveBook } from '../store/actions/books'
+import { checkToken } from '../store/actions/auth'
 import { Alert } from '../components/Alert'
 import { getWordByLocale } from '../locale'
 
@@ -25,16 +26,20 @@ class EditBook extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      formControls: this.createFormControls(this.props.book),
-      image: createControl({
-        value: this.props.book.image,
-        label: getWordByLocale('bookPhoto', this.props.locale),
-        type: "file",
-        errorMessage: getWordByLocale('errBookCover', this.props.locale)
-      }, {required: true}),
-      placeCode: this.props.book.place
-    })
+    this.props.checkToken(this.props.history)
+
+    if (this.props.isAuth) {
+      this.setState({
+        formControls: this.createFormControls(this.props.book),
+        image: createControl({
+          value: this.props.book.image,
+          label: getWordByLocale('bookPhoto', this.props.locale),
+          type: "file",
+          errorMessage: getWordByLocale('errBookCover', this.props.locale)
+        }, {required: true}),
+        placeCode: this.props.book.place
+      })
+    }
   }
 
   componentDidUpdate() {
@@ -195,7 +200,7 @@ class EditBook extends Component {
           />
 
     return (
-      <Layout withHeader={true}>
+      <Layout withHeader={true} {...this.props}>
         { this.props.showAlert ? <Alert text={getWordByLocale('bookUpdated', this.props.locale)} className="success" /> : null }
         <div>
           <div className="mb-5">
@@ -250,13 +255,15 @@ function mapStateToProps(state) {
     book: state.books.book,
     showAlert: state.app.showAlert,
     places: state.places.places,
-    locale: state.app.locale
+    locale: state.app.locale,
+    isAuth: state.auth.isAuth
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    editBookHandler: (book, history) => dispatch(saveBook(book, history))
+    editBookHandler: (book, history) => dispatch(saveBook(book, history)),
+    checkToken: history => dispatch(checkToken(history))
   }
 }
 

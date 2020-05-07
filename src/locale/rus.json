@@ -40,7 +40,7 @@
   "loginButton": "Войти",
   "password": "Пароль",
   "errorEmail": "Введите корректный email",
-  "errorPwd": "Введите корректный пароль",
+  "errorPwd": "Минимум 6 символов",
   "saveBtn": "Сохранить",
   "placeCreated": "Месторасположение успешно создано",
   "placeDeleted": "Месторасположение успешно удалено",
@@ -60,5 +60,7 @@
   "delPlacePrompt": "Вы уверены?",
   "deleteBtn": "Удалить",
   "cancelBtn": "Отмена",
-  "closeBtn": "Закрыть"
+  "closeBtn": "Закрыть",
+  "emailNotFound": "Пользователь с таким email не найден",
+  "pwdIncorrect": "Неверный пароль"
 }

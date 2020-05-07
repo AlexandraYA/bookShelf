@@ -17,7 +17,7 @@ class BookDetail extends Component {
   render() {
     const bookPlace = this.props.book.place
     return (
-      <Layout withHeader={true}>
+      <Layout withHeader={true} {...this.props}>
         <div className="container">
           {
             this.props.book

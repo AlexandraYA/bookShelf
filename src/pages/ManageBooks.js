@@ -15,6 +15,7 @@ import {
   searchIntoAllFields
 } from '../store/actions/books'
 import { resetFilterSettings, saveFilterValue, saveSearchValue } from '../store/actions/app'
+import { checkToken } from '../store/actions/auth'
 import places from '../data/places.json'
 import pageTypes from '../data/pageTypes.json'
 import { getWordByLocale } from '../locale'
@@ -29,8 +30,12 @@ class ManageBooks extends Component {
   }
 
   componentDidMount() {
-    this.props.setPageType(pageTypes.OTHER)
-    this.props.fetchBooks();
+    this.props.checkToken(this.props.history)
+
+    if (this.props.isAuth) {
+      this.props.setPageType(pageTypes.OTHER)
+      this.props.fetchBooks()
+    }
   }
 
   onSubmitHandler = event => {
@@ -90,7 +95,7 @@ class ManageBooks extends Component {
 
   render() {
     return (
-      <Layout withHeader={true}>
+      <Layout withHeader={true} {...this.props}>
         <div>
           <h1 className="mb-5">{ getWordByLocale('titleManageBooks', this.props.locale) }</h1>
           { this.props.showAlert ? <Alert text={ getWordByLocale('searchedNothing', this.props.locale) } className="danger" /> : null }
@@ -198,7 +203,8 @@ function mapStateToProps(state) {
     defaultFilter: state.app.filterSettings.filter,
     showAlert: state.app.showAlert,
     search: state.app.filterSettings.search,
-    locale: state.app.locale
+    locale: state.app.locale,
+    isAuth: state.auth.isAuth
   }
 }
 
@@ -213,7 +219,8 @@ function mapDispatchToProps(dispatch) {
     filter: () => dispatch(filter()),
     changeSearchValue: value => dispatch(saveSearchValue(value)),
     searchIntoAllFields: value => dispatch(searchIntoAllFields(value)),
-    reset: () => dispatch(resetFilterSettings())
+    reset: () => dispatch(resetFilterSettings()),
+    checkToken: history => dispatch(checkToken(history))
   }
 }
 

@@ -5,7 +5,9 @@ import is from 'is_js';
 import Input from '../components/UI/Input'
 import Button from '../components/UI/Button'
 import Layout from '../components/Layout'
+import { Alert } from '../components/Alert'
 import { getWordByLocale } from '../locale'
+import { login, register } from '../store/actions/auth'
 
 
 class Auth extends Component {
@@ -13,7 +15,11 @@ class Auth extends Component {
   constructor(props) {
     super(props)
 
-    this.settings = {
+    this.state = {
+      isFormValid: false,
+      formControls: this.createFormControls(),
+      regim: 'login',
+      locale: this.props.locale,
       pages: {
         login: {
           btnText: getWordByLocale('loginButton', this.props.locale)
@@ -23,38 +29,55 @@ class Auth extends Component {
         }
       }
     }
+  }
 
-    this.state = {
-      isFormValid: false,
-      formControls: {
-        email: {
-          value: '',
-          type: 'email',
-          label: 'Email',
-          labelClass: "sr-only",
-          errorMessage: getWordByLocale('errorEmail', this.props.locale),
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            email: true
-          }
-        },
-        password: {
-          value: '',
-          type: 'password',
-          label: getWordByLocale('password', this.props.locale),
-          labelClass: "sr-only",
-          errorMessage: getWordByLocale('errorPwd', this.props.locale),
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            minLength: 6
+  componentDidUpdate() {
+    if (this.state.locale !== this.props.locale) {
+      this.setState({
+        isFormValid: false,
+        formControls: this.createFormControls(),
+        regim: 'login',
+        locale: this.props.locale,
+        pages: {
+          login: {
+            btnText: getWordByLocale('loginButton', this.props.locale)
+          },
+          register: {
+            btnText: getWordByLocale('registerButton', this.props.locale)
           }
         }
+      })
+    }
+  }
+
+  createFormControls = () => {
+    return {
+      email: {
+        value: '',
+        type: 'email',
+        label: 'Email',
+        labelClass: "sr-only",
+        errorMessage: getWordByLocale('errorEmail', this.props.locale),
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          email: true
+        }
       },
-      regim: 'login'
+      password: {
+        value: '',
+        type: 'password',
+        label: getWordByLocale('password', this.props.locale),
+        labelClass: "sr-only",
+        errorMessage: getWordByLocale('errorPwd', this.props.locale),
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          minLength: 6
+        }
+      }
     }
   }
 
@@ -62,29 +85,33 @@ class Auth extends Component {
     event.preventDefault()
   }
 
-  toggleRegim = (event) => {
+  toggleRegim = event => {
     event.preventDefault()
     this.setState({
       regim: this.state.regim === 'login' ? 'register' : 'login'
     })
   }
 
-  loginHandler = () => {
-    console.log("login")
-    /* this.props.auth(
-      this.state.formControls.email.value,
-      this.state.formControls.password.value,
-      true
-    ) */
-  };
+  authHandler = event => {
+    event.preventDefault()
 
-  registerHandler = () => {
-    console.log("registration")
-    /* this.props.auth(
-      this.state.formControls.email.value,
-      this.state.formControls.password.value,
-      false
-    ) */
+    if (this.state.regim === 'login') {
+      this.props.login(
+        this.state.formControls.email.value,
+        this.state.formControls.password.value,
+        this.props.history
+      )
+    } else {
+      this.props.register(
+        this.state.formControls.email.value,
+        this.state.formControls.password.value
+      )
+      this.setState({
+        regim: 'login',
+        isFormValid: false,
+        formControls: this.createFormControls()
+      })
+    }
   };
 
   validateControl(value, validation) {
@@ -156,13 +183,14 @@ class Auth extends Component {
       <Layout withHeader={true}>
         <div className="row justify-content-center">
           <div className="col-sm-12 col-md-10 col-lg-4">
-            <div className="shadow-sm bg-white rounded p-5">
+            <div className="shadow-sm bg-white rounded p-5 mt-5">
               <h3 className="text-center mb-4">
                 { this.state.regim === 'login'
                     ? getWordByLocale('titleAuth', this.props.locale)
                     : getWordByLocale('titleRegistr', this.props.locale)
                 }
               </h3>
+              { this.props.showAlert ? <Alert text={ getWordByLocale(this.props.error, this.props.locale) } className="danger" /> : null }
               <form onSubmit={this.onFormSubmit} className="mb-4">
 
                 { this.renderInputs() }
@@ -170,9 +198,9 @@ class Auth extends Component {
                 <Link to={"/"} >
                   <Button
                     className='btn btn-primary btn-lg btn-block'
-                    onClick={this.loginHandler}
+                    onClick={this.authHandler}
                     disabled={!this.state.isFormValid}>
-                    { this.settings.pages[this.state.regim].btnText }
+                    { this.state.pages[this.state.regim].btnText }
                   </Button>
                 </Link>
               </form>
@@ -194,8 +222,17 @@ class Auth extends Component {
 
 function mapStateToProps(state) {
   return {
-    locale: state.app.locale
+    showAlert: state.app.showAlert,
+    locale: state.app.locale,
+    error: state.auth.error
   }
 }
 
-export default connect(mapStateToProps)(Auth)
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (email, pwd, history) => dispatch(login(email, pwd, history)),
+    register: (email, pwd) => dispatch(register(email, pwd))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)

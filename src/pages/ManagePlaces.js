@@ -7,6 +7,7 @@ import Button from '../components/UI/Button'
 import { Alert } from '../components/Alert'
 import { IconTrash } from '../components/UI/icons'
 import { createPlace, deletePlace, beforeDeletePlace } from '../store/actions/places'
+import { checkToken } from '../store/actions/auth'
 import { getWordByLocale } from '../locale'
 
 
@@ -31,6 +32,10 @@ class ManagePlaces extends Component {
         }
       }
     }
+  }
+
+  componentDidMount() {
+    this.props.checkToken(this.props.history)
   }
 
   componentDidUpdate() {
@@ -142,7 +147,7 @@ class ManagePlaces extends Component {
     const { regim, alert } = this.state
 
     return (
-      <Layout withHeader={true}>
+      <Layout withHeader={true} {...this.props}>
         { this.props.showAlert ? <Alert text={alert[regim].text} className={alert[regim].class} /> : null }
         <div>
           <h1 className="mb-5 text-break">{ getWordByLocale('titleManagePlaces', this.props.locale) }</h1>
@@ -196,7 +201,8 @@ function mapDispatchToProps(dispatch) {
   return {
     createPlace: place => dispatch(createPlace(place)),
     deletePlace: placeId => dispatch(deletePlace(placeId)),
-    beforeDeletePlace: (placeId, placeName) => dispatch(beforeDeletePlace(placeId, placeName))
+    beforeDeletePlace: (placeId, placeName) => dispatch(beforeDeletePlace(placeId, placeName)),
+    checkToken: history => dispatch(checkToken(history))
   }
 }
 

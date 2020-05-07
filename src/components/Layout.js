@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Navbar } from './Navbar/Navbar'
 import Modal from './Modal'
 import { changeLocale } from '../store/actions/app'
+import { logout } from '../store/actions/auth'
 
 
 const Layout = props => {
@@ -12,6 +13,8 @@ const Layout = props => {
         <Navbar
           changeLocaleHandle={props.changeLocale}
           currentLocale={props.locale}
+          logoutHandler={() => props.logout(props.history)}
+          isAuth={props.isAuth}
         />
       </header>
       }
@@ -26,13 +29,15 @@ const Layout = props => {
 function mapStateToProps(state) {
   return {
     showModal: state.app.showModal,
-    locale: state.app.locale
+    locale: state.app.locale,
+    isAuth: state.auth.isAuth
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeLocale: () => dispatch(changeLocale())
+    changeLocale: () => dispatch(changeLocale()),
+    logout: history => dispatch(logout(history))
   }
 }
 

@@ -19,3 +19,12 @@ code {
   min-height: 100vh;
   height: 100%;
 }
+
+.btn.disabled, .btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

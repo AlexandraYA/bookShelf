@@ -30,3 +30,10 @@ export const SAVE_SEARCH_VALUE = 'SAVE_SEARCH_VALUE'
 export const SAVE_SEARCH_FIELD_VALUE = 'SAVE_SEARCH_FIELD_VALUE'
 
 export const CHANGE_LOCALE = 'CHANGE_LOCALE'
+export const REGISTER = 'REGISTER'
+export const LOGIN = 'LOGIN'
+export const LOGOUT = 'LOGOUT'
+export const SET_ERROR = 'SET_ERROR'
+
+export const TOKEN_TRUE = 'TOKEN_TRUE'
+export const TOKEN_FALSE = 'TOKEN_FALSE'

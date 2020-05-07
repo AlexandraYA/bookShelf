@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { IconSignOut } from '../UI/icons'
+import { IconSignOut, IconSignIn } from '../UI/icons'
 import { getWordByLocale } from '../../locale'
 import classes from './Navbar.module.css'
 
@@ -58,21 +58,28 @@ export const Navbar = props => {
                 { getWordByLocale('menuAllBooks', props.currentLocale) }
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink to="/create" className="nav-link pl-4">
-                { getWordByLocale('menuAddBook', props.currentLocale) }
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/books" className="nav-link pl-4">
-                { getWordByLocale('menuManagement', props.currentLocale) }
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink to="/places" className="nav-link pl-4">
-                { getWordByLocale('menuFields', props.currentLocale) }
-              </NavLink>
-            </li>
+            { props.isAuth
+              ? (
+                <>
+                  <li className="nav-item">
+                    <NavLink to="/create" className="nav-link pl-4">
+                      { getWordByLocale('menuAddBook', props.currentLocale) }
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/books" className="nav-link pl-4">
+                      { getWordByLocale('menuManagement', props.currentLocale) }
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/places" className="nav-link pl-4">
+                      { getWordByLocale('menuFields', props.currentLocale) }
+                    </NavLink>
+                  </li>
+                </>
+              )
+              : null
+            }
             <li>
               <button
                 type="button"
@@ -83,9 +90,14 @@ export const Navbar = props => {
               </button>
             </li>
             <li className="nav-item">
-              <NavLink to="/auth" className="nav-link pl-4">
-                { getWordByLocale('menuOut', props.currentLocale) }
-              </NavLink>
+              { props.isAuth
+                ? <span onClick={props.logoutHandler} className="nav-link pl-4">
+                  { getWordByLocale('menuOut', props.currentLocale) }
+                </span>
+                : <NavLink to={'/auth'} className="nav-link pl-4">
+                  { getWordByLocale('loginButton', props.currentLocale) }
+                </NavLink>
+              }
             </li>
           </ul>
         </div>
@@ -107,21 +119,28 @@ export const Navbar = props => {
               { getWordByLocale('menuAllBooks', props.currentLocale) }
             </NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink to="/create" className="nav-link">
-              { getWordByLocale('menuAddBook', props.currentLocale) }
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="/books" className="nav-link">
-              { getWordByLocale('menuManagement', props.currentLocale) }
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="/places" className="nav-link">
-              { getWordByLocale('menuFields', props.currentLocale) }
-            </NavLink>
-          </li>
+          { props.isAuth
+            ? (
+                <>
+                  <li className="nav-item">
+                    <NavLink to="/create" className="nav-link">
+                      { getWordByLocale('menuAddBook', props.currentLocale) }
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/books" className="nav-link">
+                      { getWordByLocale('menuManagement', props.currentLocale) }
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/places" className="nav-link">
+                      { getWordByLocale('menuFields', props.currentLocale) }
+                    </NavLink>
+                  </li>
+                </>
+            )
+            : null
+          }
         </ul>
         <ul className="navbar-nav ml-md-auto">
           <li>
@@ -134,9 +153,14 @@ export const Navbar = props => {
             </button>
           </li>
           <li>
-            <NavLink to="/auth" className="nav-link">
-              <IconSignOut />
-            </NavLink>
+            { props.isAuth
+              ? <span onClick={props.logoutHandler} className="nav-link cursor-pointer">
+                <IconSignOut />
+              </span>
+              : <NavLink to={'/auth'} className="nav-link pl-4">
+                <IconSignIn />
+              </NavLink>
+            }
           </li>
         </ul>
       </nav>

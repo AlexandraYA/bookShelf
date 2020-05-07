@@ -61,7 +61,7 @@ class Home extends Component {
     };
 
     return (
-      <Layout withHeader={true}>
+      <Layout withHeader={true} {...this.props}>
         <div>
           <h1 className="mb-5">{ getWordByLocale('titleHome', this.props.locale) }</h1>
           { this.props.showAlert ? <Alert text={ getWordByLocale('searchedNothing', this.props.locale) } className="danger" /> : null }
@@ -123,4 +123,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
