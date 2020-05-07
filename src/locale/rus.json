@@ -1,6 +1,6 @@
 {
   "locale": "RU",
-  "siteName": "Книжная полка",
+  "siteName": "ДомБиблио",
   "menuAllBooks": "Весь список",
   "menuAddBook": "Добавить книгу",
   "menuManagement": "Управление",
@@ -34,7 +34,8 @@
   "titleHome": "Все книги здесь",
   "titleEditBook": "Редактировать книгу",
   "titleCreateBook": "Добавить книгу",
-  "titleAuth": "Домашняя библиотека",
+  "titleAuth": "Авторизация",
+  "titleRegistr": "Регистрация",
   "registerButton": "Зарегистрироваться",
   "loginButton": "Войти",
   "password": "Пароль",

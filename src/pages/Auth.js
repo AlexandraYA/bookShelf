@@ -153,11 +153,16 @@ class Auth extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout withHeader={true}>
         <div className="row justify-content-center">
           <div className="col-sm-12 col-md-10 col-lg-4">
             <div className="shadow-sm bg-white rounded p-5">
-              <h3 className="text-center mb-4">{ getWordByLocale('titleAuth', this.props.locale) }</h3>
+              <h3 className="text-center mb-4">
+                { this.state.regim === 'login'
+                    ? getWordByLocale('titleAuth', this.props.locale)
+                    : getWordByLocale('titleRegistr', this.props.locale)
+                }
+              </h3>
               <form onSubmit={this.onFormSubmit} className="mb-4">
 
                 { this.renderInputs() }
