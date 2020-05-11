@@ -6,7 +6,7 @@ import { getWordByLocale } from '../locale'
 
 export const Card = props => {
 
-  const bookCover = require('../assets/images/' + props.image)
+  const bookCover = props.book.isNew ? props.image : require('../assets/images/' + props.image)
 
   return (
     <div className="card mb-3">

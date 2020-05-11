@@ -111,7 +111,8 @@ class EditBook extends Component {
       },
       year: year.value,
       place: this.state.placeCode,
-      image: this.state.image.value ? this.state.image.value : this.props.book.image
+      image: this.state.image.value ? this.state.image.value : this.props.book.image,
+      isNew: this.props.book.isNew
     }
 
     this.props.editBookHandler(book, this.props.history)

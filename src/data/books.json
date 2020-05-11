@@ -12,7 +12,8 @@
       },
       "year": "1938",
       "place": "onIkea",
-      "image": "petr1.jpg"
+      "image": "petr1.jpg",
+      "isNew": false
     },
     {
       "id": 2,
@@ -26,7 +27,8 @@
       },
       "year": "1948",
       "place": "onIkea",
-      "image": "chapaev.jpg"
+      "image": "chapaev.jpg",
+      "isNew": false
     },
     {
       "id": 3,
@@ -40,7 +42,8 @@
       },
       "year": "1952",
       "place": "onIkea",
-      "image": "mayakovskiy.jpg"
+      "image": "mayakovskiy.jpg",
+      "isNew": false
     },
     {
       "id": 4,
@@ -54,7 +57,8 @@
       },
       "year": "1946",
       "place": "onIkea",
-      "image": "vizgnanii.jpg"
+      "image": "vizgnanii.jpg",
+      "isNew": false
     },
     {
       "id": 5,
@@ -68,7 +72,8 @@
       },
       "year": "1965",
       "place": "onIkea",
-      "image": "pochta.jpg"
+      "image": "pochta.jpg",
+      "isNew": false
     },
 
     {
@@ -83,7 +88,8 @@
       },
       "year": "1976",
       "place": "trellis",
-      "image": "alisavchudes.jpg"
+      "image": "alisavchudes.jpg",
+      "isNew": false
     },
     {
       "id": 7,
@@ -97,7 +103,8 @@
       },
       "year": "1953",
       "place": "trellis",
-      "image": "tolstoydetyam.jpg"
+      "image": "tolstoydetyam.jpg",
+      "isNew": false
     },
     {
       "id": 8,
@@ -111,7 +118,8 @@
       },
       "year": "2009",
       "place": "trellis",
-      "image": "taktak.jpg"
+      "image": "taktak.jpg",
+      "isNew": false
     },
     {
       "id": 9,
@@ -125,7 +133,8 @@
       },
       "year": "1946",
       "place": "trellis",
-      "image": "zolotayaribka.jpg"
+      "image": "zolotayaribka.jpg",
+      "isNew": false
     },
     {
       "id": 10,
@@ -139,7 +148,8 @@
       },
       "year": "1978",
       "place": "trellis",
-      "image": "konekgorbunek.jpg"
+      "image": "konekgorbunek.jpg",
+      "isNew": false
     },
 
     {
@@ -154,7 +164,8 @@
       },
       "year": "1994",
       "place": "cabinet2Down",
-      "image": "obshsrebenkom.jpg"
+      "image": "obshsrebenkom.jpg",
+      "isNew": false
     },
     {
       "id": 12,
@@ -168,7 +179,8 @@
       },
       "year": "2012",
       "place": "cabinet2Down",
-      "image": "tvoystart.jpg"
+      "image": "tvoystart.jpg",
+      "isNew": false
     },
     {
       "id": 13,
@@ -182,7 +194,8 @@
       },
       "year": "1989",
       "place": "cabinet2Down",
-      "image": "podrostky.jpg"
+      "image": "podrostky.jpg",
+      "isNew": false
     },
     {
       "id": 14,
@@ -196,7 +209,8 @@
       },
       "year": "1999",
       "place": "cabinet2Down",
-      "image": "piterpen.jpg"
+      "image": "piterpen.jpg",
+      "isNew": false
     },
     {
       "id": 15,
@@ -210,7 +224,8 @@
       },
       "year": "2016",
       "place": "cabinet2Down",
-      "image": "lobbism.jpg"
+      "image": "lobbism.jpg",
+      "isNew": false
     },
 
     {
@@ -225,7 +240,8 @@
       },
       "year": "1997",
       "place": "cabinetLeftUp",
-      "image": "kudaidesh.jpg"
+      "image": "kudaidesh.jpg",
+      "isNew": false
     },
     {
       "id": 17,
@@ -239,7 +255,8 @@
       },
       "year": "1972",
       "place": "cabinetLeftUp",
-      "image": "chtodelat.jpg"
+      "image": "chtodelat.jpg",
+      "isNew": false
     },
     {
       "id": 18,
@@ -253,7 +270,8 @@
       },
       "year": "1974",
       "place": "cabinetLeftUp",
-      "image": "jelezniypotok.jpg"
+      "image": "jelezniypotok.jpg",
+      "isNew": false
     },
     {
       "id": 19,
@@ -267,7 +285,8 @@
       },
       "year": "1954",
       "place": "cabinetLeftUp",
-      "image": "zoloto.jpg"
+      "image": "zoloto.jpg",
+      "isNew": false
     },
     {
       "id": 20,
@@ -281,7 +300,8 @@
       },
       "year": "1967",
       "place": "cabinetLeftUp",
-      "image": "dode.jpg"
+      "image": "dode.jpg",
+      "isNew": false
     },
 
     {
@@ -296,7 +316,8 @@
       },
       "year": "1985",
       "place": "cabinet1Down",
-      "image": "izumrudniy.jpg"
+      "image": "izumrudniy.jpg",
+      "isNew": false
     },
     {
       "id": 22,
@@ -310,7 +331,8 @@
       },
       "year": "1972",
       "place": "cabinet1Down",
-      "image": "chehovrassk.jpg"
+      "image": "chehovrassk.jpg",
+      "isNew": false
     },
     {
       "id": 23,
@@ -324,7 +346,8 @@
       },
       "year": "1958",
       "place": "cabinet1Down",
-      "image": "tricvetavremeni.jpg"
+      "image": "tricvetavremeni.jpg",
+      "isNew": false
     },
     {
       "id": 24,
@@ -338,7 +361,8 @@
       },
       "year": "1982",
       "place": "cabinet1Down",
-      "image": "jiznvzaymi.jpg"
+      "image": "jiznvzaymi.jpg",
+      "isNew": false
     },
     {
       "id": 25,
@@ -352,7 +376,8 @@
       },
       "year": "1996",
       "place": "cabinet1Down",
-      "image": "jannadark.jpg"
+      "image": "jannadark.jpg",
+      "isNew": false
     },
 
     {
@@ -367,7 +392,8 @@
       },
       "year": "1987",
       "place": "cabinetRightUp",
-      "image": "agatachristi.jpg"
+      "image": "agatachristi.jpg",
+      "isNew": false
     },
     {
       "id": 27,
@@ -381,7 +407,8 @@
       },
       "year": "1978",
       "place": "cabinetRightUp",
-      "image": "mobidick.jpg"
+      "image": "mobidick.jpg",
+      "isNew": false
     },
     {
       "id": 28,
@@ -395,7 +422,8 @@
       },
       "year": "1955",
       "place": "cabinetRightUp",
-      "image": "tihiydon.jpg"
+      "image": "tihiydon.jpg",
+      "isNew": false
     },
     {
       "id": 29,
@@ -409,7 +437,8 @@
       },
       "year": "1998",
       "place": "cabinetRightUp",
-      "image": "andersen.jpg"
+      "image": "andersen.jpg",
+      "isNew": false
     },
     {
       "id": 30,
@@ -423,7 +452,8 @@
       },
       "year": "1993",
       "place": "cabinetRightUp",
-      "image": "chaynikov.jpg"
+      "image": "chaynikov.jpg",
+      "isNew": false
     }
   ]
 }

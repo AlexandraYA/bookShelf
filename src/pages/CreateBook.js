@@ -94,7 +94,8 @@ class CreateBook extends Component {
       },
       year: year.value,
       place: this.state.placeCode,
-      image: this.state.image.value
+      image: this.state.image.value,
+      isNew: true
     }
 
     this.props.createBook(book, this.props.history)

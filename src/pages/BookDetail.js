@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from '../components/Layout'
-import belka from '../belka.jpg'
 import { getBookById } from '../store/actions/books'
 import Loader from '../components/UI/Loader/Loader'
 import places from '../data/places.json'
@@ -10,8 +9,26 @@ import { getWordByLocale } from '../locale'
 
 class BookDetail extends Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      bookCover: require('../belka.jpg'),
+      bookUploaded: false
+    }
+  }
+
   componentDidMount() {
     this.props.getBookById(this.props.match.params.id)
+  }
+
+  componentDidUpdate() {
+    if (!this.state.bookUploaded) {
+      this.setState({
+        bookUploaded: true,
+        bookCover: this.props.book.isNew ? this.props.book.image : require('../assets/images/' + this.props.book.image)
+      })
+    }
   }
 
   render() {
@@ -42,9 +59,9 @@ class BookDetail extends Component {
                       </ul>
                     </div>
                     <div className="col-12 col-sm-5 text-center">
-                      <img
+                     <img
                         style={{maxWidth: '300px', width: '100%'}}
-                        src={this.props.book.image ? this.props.book.image : belka}
+                        src={this.state.bookCover}
                         alt={ getWordByLocale('bookCover', this.props.locale) }
                       />
                     </div>
